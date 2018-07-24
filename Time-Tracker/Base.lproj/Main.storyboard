@@ -6,6 +6,8 @@
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
+        <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -18,13 +20,55 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <prototypes>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="Cell" id="q2t-rC-aQu">
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="Cell" id="q2t-rC-aQu" customClass="RecordTableViewCell" customModule="Time_Tracker" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="28" width="375" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="q2t-rC-aQu" id="iNJ-9G-VWc">
                                     <rect key="frame" x="0.0" y="0.0" width="375" height="43.666666666666664"/>
                                     <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="GKO-jd-pma">
+                                            <rect key="frame" x="16" y="4" width="35" height="35"/>
+                                            <color key="backgroundColor" red="0.53333333329999999" green="0.92156862750000001" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                            <constraints>
+                                                <constraint firstAttribute="width" constant="35" id="BiQ-NA-N1F"/>
+                                                <constraint firstAttribute="height" constant="35" id="R1J-Se-i6F"/>
+                                                <constraint firstAttribute="width" secondItem="GKO-jd-pma" secondAttribute="height" multiplier="1:1" id="dhF-aZ-1tC"/>
+                                            </constraints>
+                                        </view>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="ebis@Austria" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="1RB-da-Eeu">
+                                            <rect key="frame" x="76" y="0.0" width="101" height="42"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                            <nil key="textColor"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="infoDark" showsTouchWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="0YJ-3A-gHY">
+                                            <rect key="frame" x="336" y="10" width="23" height="22"/>
+                                        </button>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="12:45 h" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="U4M-nT-pRL">
+                                            <rect key="frame" x="259" y="11" width="57" height="20"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                            <nil key="textColor"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                    </subviews>
+                                    <constraints>
+                                        <constraint firstItem="1RB-da-Eeu" firstAttribute="centerY" secondItem="GKO-jd-pma" secondAttribute="centerY" id="3rM-Qb-2kd"/>
+                                        <constraint firstAttribute="bottom" secondItem="GKO-jd-pma" secondAttribute="bottom" constant="4" id="6Po-gB-8mw"/>
+                                        <constraint firstItem="0YJ-3A-gHY" firstAttribute="top" secondItem="1RB-da-Eeu" secondAttribute="top" constant="10" id="6ax-pB-wLe"/>
+                                        <constraint firstItem="U4M-nT-pRL" firstAttribute="leading" secondItem="1RB-da-Eeu" secondAttribute="trailing" constant="82" id="8Ni-T2-4Qo"/>
+                                        <constraint firstItem="0YJ-3A-gHY" firstAttribute="trailing" secondItem="iNJ-9G-VWc" secondAttribute="trailingMargin" id="FZN-s2-LzI"/>
+                                        <constraint firstItem="0YJ-3A-gHY" firstAttribute="leading" secondItem="U4M-nT-pRL" secondAttribute="trailing" constant="20" id="Krp-nH-9Cx"/>
+                                        <constraint firstItem="GKO-jd-pma" firstAttribute="leading" secondItem="iNJ-9G-VWc" secondAttribute="leading" constant="16" id="YJP-n4-ijo"/>
+                                        <constraint firstItem="U4M-nT-pRL" firstAttribute="centerY" secondItem="0YJ-3A-gHY" secondAttribute="centerY" id="gnb-4K-pRd"/>
+                                        <constraint firstItem="0YJ-3A-gHY" firstAttribute="top" secondItem="iNJ-9G-VWc" secondAttribute="top" constant="10" id="hxa-mj-kC9"/>
+                                        <constraint firstItem="GKO-jd-pma" firstAttribute="top" secondItem="iNJ-9G-VWc" secondAttribute="top" constant="4" id="irN-mq-taA"/>
+                                        <constraint firstItem="1RB-da-Eeu" firstAttribute="leading" secondItem="GKO-jd-pma" secondAttribute="trailing" constant="25" id="udC-A2-paO"/>
+                                    </constraints>
                                 </tableViewCellContentView>
+                                <connections>
+                                    <outlet property="categoryColorView" destination="GKO-jd-pma" id="j7D-XC-651"/>
+                                </connections>
                             </tableViewCell>
                         </prototypes>
                         <connections>
@@ -32,11 +76,15 @@
                             <outlet property="delegate" destination="2g1-ED-gvs" id="ce6-cb-Vjr"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" title="Montag, 23.07.2018" id="v5R-0f-HXg"/>
+                    <navigationItem key="navigationItem" title="Montag, 23.07.2018" id="v5R-0f-HXg">
+                        <barButtonItem key="rightBarButtonItem" systemItem="add" id="DR9-jq-uEE">
+                            <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        </barButtonItem>
+                    </navigationItem>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="o5r-uu-GO1" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1276" y="692"/>
+            <point key="canvasLocation" x="1276" y="691.62561576354688"/>
         </scene>
         <!--Item-->
         <scene sceneID="Uuh-uY-pkT">
@@ -47,6 +95,10 @@
                     <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" translucent="NO" largeTitles="YES" id="7oc-Hb-m6t">
                         <rect key="frame" x="0.0" y="44" width="375" height="96"/>
                         <autoresizingMask key="autoresizingMask"/>
+                        <color key="barTintColor" red="0.53333333333333333" green="0.92156862745098034" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                        <textAttributes key="largeTitleTextAttributes">
+                            <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        </textAttributes>
                     </navigationBar>
                     <nil name="viewControllers"/>
                     <connections>
