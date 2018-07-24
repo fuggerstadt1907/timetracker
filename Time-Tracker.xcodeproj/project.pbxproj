@@ -8,22 +8,22 @@
 
 /* Begin PBXBuildFile section */
 		D226600A2107BA0F004EAFA3 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D22660092107BA0F004EAFA3 /* AppDelegate.swift */; };
-		D226600C2107BA0F004EAFA3 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D226600B2107BA0F004EAFA3 /* ViewController.swift */; };
 		D226600F2107BA0F004EAFA3 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D226600D2107BA0F004EAFA3 /* Main.storyboard */; };
 		D22660122107BA0F004EAFA3 /* Time_Tracker.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = D22660102107BA0F004EAFA3 /* Time_Tracker.xcdatamodeld */; };
 		D22660142107BA10004EAFA3 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D22660132107BA10004EAFA3 /* Assets.xcassets */; };
 		D22660172107BA10004EAFA3 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D22660152107BA10004EAFA3 /* LaunchScreen.storyboard */; };
+		D226601F2107BC45004EAFA3 /* RecordTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D226601E2107BC45004EAFA3 /* RecordTableViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		D22660062107BA0F004EAFA3 /* Time-Tracker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Time-Tracker.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		D22660092107BA0F004EAFA3 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		D226600B2107BA0F004EAFA3 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		D226600E2107BA0F004EAFA3 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		D22660112107BA0F004EAFA3 /* Time_Tracker.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Time_Tracker.xcdatamodel; sourceTree = "<group>"; };
 		D22660132107BA10004EAFA3 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		D22660162107BA10004EAFA3 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		D22660182107BA10004EAFA3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		D226601E2107BC45004EAFA3 /* RecordTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordTableViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -56,8 +56,8 @@
 		D22660082107BA0F004EAFA3 /* Time-Tracker */ = {
 			isa = PBXGroup;
 			children = (
+				D226601E2107BC45004EAFA3 /* RecordTableViewController.swift */,
 				D22660092107BA0F004EAFA3 /* AppDelegate.swift */,
-				D226600B2107BA0F004EAFA3 /* ViewController.swift */,
 				D226600D2107BA0F004EAFA3 /* Main.storyboard */,
 				D22660132107BA10004EAFA3 /* Assets.xcassets */,
 				D22660152107BA10004EAFA3 /* LaunchScreen.storyboard */,
@@ -138,8 +138,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D226600C2107BA0F004EAFA3 /* ViewController.swift in Sources */,
 				D22660122107BA0F004EAFA3 /* Time_Tracker.xcdatamodeld in Sources */,
+				D226601F2107BC45004EAFA3 /* RecordTableViewController.swift in Sources */,
 				D226600A2107BA0F004EAFA3 /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
