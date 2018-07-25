@@ -16,6 +16,7 @@
 		D22660212107C003004EAFA3 /* RecordTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D22660202107C003004EAFA3 /* RecordTableViewCell.swift */; };
 		D29C95FE2108764C00663E1F /* DashboardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D29C95FD2108764C00663E1F /* DashboardViewController.swift */; };
 		D29C960321087B9D00663E1F /* CategoryItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = D29C960221087B9D00663E1F /* CategoryItem.swift */; };
+		D2AA39612108DB9900BE53D5 /* CategoryColors.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2AA39602108DB9900BE53D5 /* CategoryColors.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -30,6 +31,7 @@
 		D22660202107C003004EAFA3 /* RecordTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordTableViewCell.swift; sourceTree = "<group>"; };
 		D29C95FD2108764C00663E1F /* DashboardViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardViewController.swift; sourceTree = "<group>"; };
 		D29C960221087B9D00663E1F /* CategoryItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryItem.swift; sourceTree = "<group>"; };
+		D2AA39602108DB9900BE53D5 /* CategoryColors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryColors.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -86,6 +88,7 @@
 			isa = PBXGroup;
 			children = (
 				D29C960221087B9D00663E1F /* CategoryItem.swift */,
+				D2AA39602108DB9900BE53D5 /* CategoryColors.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -175,6 +178,7 @@
 				D226601F2107BC45004EAFA3 /* RecordTableViewController.swift in Sources */,
 				D29C95FE2108764C00663E1F /* DashboardViewController.swift in Sources */,
 				D22660212107C003004EAFA3 /* RecordTableViewCell.swift in Sources */,
+				D2AA39612108DB9900BE53D5 /* CategoryColors.swift in Sources */,
 				D226600A2107BA0F004EAFA3 /* AppDelegate.swift in Sources */,
 				D29C960321087B9D00663E1F /* CategoryItem.swift in Sources */,
 			);

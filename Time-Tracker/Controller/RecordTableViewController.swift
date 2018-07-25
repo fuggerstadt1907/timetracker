@@ -11,22 +11,61 @@ import UIKit
 class RecordTableViewController: UITableViewController {
     
     var tempCategoryItems = [CategoryItem]()
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-
         
         tempCategoryItems = [
-            CategoryItem(categoryColor: UIColor.brown, categoryName: "Test mich", recordedTime: "0:05h", actionButton: #imageLiteral(resourceName: "Play")),
-            CategoryItem(categoryColor: UIColor.blue, categoryName: "Noch ein Test", recordedTime: "1:15h", actionButton: #imageLiteral(resourceName: "Play")),
-            CategoryItem(categoryColor: UIColor.red, categoryName: "Der letzte Test", recordedTime: "0:00h", actionButton: #imageLiteral(resourceName: "Play"))]
-        
-
+            CategoryItem(categoryColor: CategoryColors.DarkBlue, categoryName: "Test mich", recordedTime: "0:05h", actionButton: #imageLiteral(resourceName: "Play")),
+            CategoryItem(categoryColor: CategoryColors.Red, categoryName: "Noch ein Test", recordedTime: "1:15h", actionButton: #imageLiteral(resourceName: "Play")),
+            CategoryItem(categoryColor: CategoryColors.Green, categoryName: "Der letzte Test", recordedTime: "0:00h", actionButton: #imageLiteral(resourceName: "Play"))]
         
         self.tabBarItem = UITabBarItem(title: "Erfassen", image: #imageLiteral(resourceName: "Play"), tag: 0)
     }
+    
+    @IBAction func addNewItem(_ sender: UIBarButtonItem) {
+        let alertController = UIAlertController(title: "Neue Kategorie", message: "Lege eine neue Kategorie an.", preferredStyle: .alert)
+        
+        alertController.addTextField { (textField : UITextField!) -> Void in
+            textField.placeholder = "Name der Kategorie"
+        }
+        
+        let saveAction = UIAlertAction(title: "Hinzufügen", style: .default, handler: { alert -> Void in
+            let firstTextField = alertController.textFields![0].text
+            if alertController.textFields![0].text != "" {
+                self.tempCategoryItems.append(CategoryItem(categoryColor: CategoryColors.DarkBlue, categoryName: firstTextField, recordedTime: "0:00h", actionButton: #imageLiteral(resourceName: "Play")))
+                self.tableView.reloadData()
+            }
+            self.displayAlertWithOkBtn(title: "Fehler beim Speichern", message: "Bitte gib einen Namen für die Kategorie an.")
+        })
+        
+        let cancelAction = UIAlertAction(title: "Abbrechen", style: .default, handler: { (action : UIAlertAction!) -> Void in })
+        alertController.addAction(cancelAction)
+        alertController.addAction(saveAction)
+        self.present(alertController, animated: true, completion: nil)
+    }
+    
+    
+    private func displayAlertWithOkBtn(title: String, message: String){
+        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        let alertAction = UIAlertAction(title: "Okay", style: .default, handler: { _ in })
+        alert.addAction(alertAction)
+        self.present(alert, animated: true, completion: nil)
+    }
+    
+    
+    private func displayAlertWithTwoBtns(title: String, message: String, actionBtnText: String, cancelBtnText: String){
+        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        let firstAction = UIAlertAction(title: actionBtnText, style: .default) { alert -> Void in
+            // TODO
+        }
+        let cancelAction = UIAlertAction(title: cancelBtnText, style: .default, handler: { (action : UIAlertAction!) -> Void in })
+        alert.addAction(cancelAction)
+        alert.addAction(firstAction)
+        self.present(alert, animated: true, completion: nil)
+    }
 
-
+    
     override func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
@@ -52,3 +91,4 @@ class RecordTableViewController: UITableViewController {
     }
  
 }
+
