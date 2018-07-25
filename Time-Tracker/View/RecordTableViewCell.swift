@@ -16,5 +16,8 @@ class RecordTableViewCell: UITableViewCell {
     @IBOutlet weak var categoryTimeLabel: UILabel!
     @IBOutlet weak var categoryActionButton: UIButton!
     
-
+    @IBAction func recordTimeHandler(_ sender: UIButton) {
+        print("Time recorder not implemented yet!")
+    }
+    
 }

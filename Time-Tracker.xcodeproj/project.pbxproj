@@ -65,7 +65,6 @@
 				D29C960121087B7B00663E1F /* Model */,
 				D29C95FF2108766100663E1F /* View */,
 				D29C960421088C2D00663E1F /* Controller */,
-				D22660092107BA0F004EAFA3 /* AppDelegate.swift */,
 				D22660132107BA10004EAFA3 /* Assets.xcassets */,
 				D22660182107BA10004EAFA3 /* Info.plist */,
 				D22660102107BA0F004EAFA3 /* Time_Tracker.xcdatamodeld */,
@@ -94,6 +93,7 @@
 		D29C960421088C2D00663E1F /* Controller */ = {
 			isa = PBXGroup;
 			children = (
+				D22660092107BA0F004EAFA3 /* AppDelegate.swift */,
 				D226601E2107BC45004EAFA3 /* RecordTableViewController.swift */,
 				D29C95FD2108764C00663E1F /* DashboardViewController.swift */,
 			);

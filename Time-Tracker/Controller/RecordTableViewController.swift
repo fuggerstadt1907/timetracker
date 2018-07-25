@@ -14,10 +14,7 @@ class RecordTableViewController: UITableViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        tableView.register(RecordTableViewCell.self, forCellReuseIdentifier: "Cell")
-        tableView.delegate = self
-        tableView.dataSource = self
+
         
         tempCategoryItems = [
             CategoryItem(categoryColor: UIColor.brown, categoryName: "Test mich", recordedTime: "0:05h", actionButton: #imageLiteral(resourceName: "Play")),
@@ -36,19 +33,22 @@ class RecordTableViewController: UITableViewController {
 
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 1
+        return tempCategoryItems.count
     }
 
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        
-        //let testItem = tempCategoryItems[indexPath.row]
-        
+        let tempItem = tempCategoryItems[indexPath.row]
         let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath) as! RecordTableViewCell
-            cell.categoryLabel?.text = "Hi Test"
-
-        
+        cell.categoryColorView?.backgroundColor = tempItem.categoryColor
+        cell.categoryColorView.layer.cornerRadius = 3
+        cell.categoryLabel?.text = tempItem.categoryName
+        cell.categoryTimeLabel?.text = tempItem.recordedTime
         return cell
+    }
+    
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        print(indexPath.row)
     }
  
 }
