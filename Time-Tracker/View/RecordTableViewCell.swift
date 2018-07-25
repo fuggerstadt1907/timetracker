@@ -11,7 +11,6 @@ import UIKit
 class RecordTableViewCell: UITableViewCell {
 
     // Tableview Cell Outlets
-    @IBOutlet weak var categoryColorView: UIView!
     @IBOutlet weak var categoryLabel: UILabel!
     @IBOutlet weak var categoryTimeLabel: UILabel!
     @IBOutlet weak var categoryActionButton: UIButton!

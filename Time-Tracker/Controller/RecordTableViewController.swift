@@ -16,9 +16,9 @@ class RecordTableViewController: UITableViewController {
         super.viewDidLoad()
         
         tempCategoryItems = [
-            CategoryItem(categoryColor: CategoryColors.DarkBlue, categoryName: "Test mich", recordedTime: "0:05h", actionButton: #imageLiteral(resourceName: "Play")),
-            CategoryItem(categoryColor: CategoryColors.Red, categoryName: "Noch ein Test", recordedTime: "1:15h", actionButton: #imageLiteral(resourceName: "Play")),
-            CategoryItem(categoryColor: CategoryColors.Green, categoryName: "Der letzte Test", recordedTime: "0:00h", actionButton: #imageLiteral(resourceName: "Play"))]
+            CategoryItem(categoryName: "Test mich", recordedTime: "0:05h", actionButton: #imageLiteral(resourceName: "Play")),
+            CategoryItem(categoryName: "Noch ein Test", recordedTime: "1:15h", actionButton: #imageLiteral(resourceName: "Play")),
+            CategoryItem(categoryName: "Der letzte Test", recordedTime: "0:00h", actionButton: #imageLiteral(resourceName: "Play"))]
         
         self.tabBarItem = UITabBarItem(title: "Erfassen", image: #imageLiteral(resourceName: "Play"), tag: 0)
     }
@@ -33,10 +33,12 @@ class RecordTableViewController: UITableViewController {
         let saveAction = UIAlertAction(title: "Hinzufügen", style: .default, handler: { alert -> Void in
             let firstTextField = alertController.textFields![0].text
             if alertController.textFields![0].text != "" {
-                self.tempCategoryItems.append(CategoryItem(categoryColor: CategoryColors.DarkBlue, categoryName: firstTextField, recordedTime: "0:00h", actionButton: #imageLiteral(resourceName: "Play")))
+                self.tempCategoryItems.append(CategoryItem(categoryName: firstTextField, recordedTime: "0:00h", actionButton: #imageLiteral(resourceName: "Play")))
                 self.tableView.reloadData()
+            } else {
+                self.displayAlertWithOkBtn(title: "Fehler beim Speichern", message: "Bitte gib einen Namen für die Kategorie an.")
+                return
             }
-            self.displayAlertWithOkBtn(title: "Fehler beim Speichern", message: "Bitte gib einen Namen für die Kategorie an.")
         })
         
         let cancelAction = UIAlertAction(title: "Abbrechen", style: .default, handler: { (action : UIAlertAction!) -> Void in })
@@ -79,8 +81,6 @@ class RecordTableViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let tempItem = tempCategoryItems[indexPath.row]
         let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath) as! RecordTableViewCell
-        cell.categoryColorView?.backgroundColor = tempItem.categoryColor
-        cell.categoryColorView.layer.cornerRadius = 3
         cell.categoryLabel?.text = tempItem.categoryName
         cell.categoryTimeLabel?.text = tempItem.recordedTime
         return cell
