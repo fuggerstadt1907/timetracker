@@ -14,6 +14,7 @@
 		D22660172107BA10004EAFA3 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D22660152107BA10004EAFA3 /* LaunchScreen.storyboard */; };
 		D226601F2107BC45004EAFA3 /* RecordTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D226601E2107BC45004EAFA3 /* RecordTableViewController.swift */; };
 		D22660212107C003004EAFA3 /* RecordTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D22660202107C003004EAFA3 /* RecordTableViewCell.swift */; };
+		D29C95FC21085E7300663E1F /* RecordNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D29C95FB21085E7300663E1F /* RecordNavigationController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -26,6 +27,7 @@
 		D22660182107BA10004EAFA3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		D226601E2107BC45004EAFA3 /* RecordTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordTableViewController.swift; sourceTree = "<group>"; };
 		D22660202107C003004EAFA3 /* RecordTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordTableViewCell.swift; sourceTree = "<group>"; };
+		D29C95FB21085E7300663E1F /* RecordNavigationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordNavigationController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -66,6 +68,7 @@
 				D22660132107BA10004EAFA3 /* Assets.xcassets */,
 				D22660182107BA10004EAFA3 /* Info.plist */,
 				D22660102107BA0F004EAFA3 /* Time_Tracker.xcdatamodeld */,
+				D29C95FB21085E7300663E1F /* RecordNavigationController.swift */,
 			);
 			path = "Time-Tracker";
 			sourceTree = "<group>";
@@ -144,6 +147,7 @@
 				D22660122107BA0F004EAFA3 /* Time_Tracker.xcdatamodeld in Sources */,
 				D226601F2107BC45004EAFA3 /* RecordTableViewController.swift in Sources */,
 				D22660212107C003004EAFA3 /* RecordTableViewCell.swift in Sources */,
+				D29C95FC21085E7300663E1F /* RecordNavigationController.swift in Sources */,
 				D226600A2107BA0F004EAFA3 /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

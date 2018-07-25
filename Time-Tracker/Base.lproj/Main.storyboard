@@ -96,11 +96,11 @@
             </objects>
             <point key="canvasLocation" x="1276" y="691.62561576354688"/>
         </scene>
-        <!--Item-->
+        <!--Erfassen-->
         <scene sceneID="Uuh-uY-pkT">
             <objects>
-                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="yWq-RI-S6R" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Item" id="NYB-Zz-Qgj"/>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="yWq-RI-S6R" customClass="RecordNavigationController" customModule="Time_Tracker" customModuleProvider="target" sceneMemberID="viewController">
+                    <tabBarItem key="tabBarItem" title="Erfassen" id="NYB-Zz-Qgj"/>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" translucent="NO" largeTitles="YES" id="7oc-Hb-m6t">
                         <rect key="frame" x="0.0" y="44" width="375" height="96"/>

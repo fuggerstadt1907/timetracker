@@ -12,6 +12,9 @@ class RecordTableViewController: UITableViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        tableView.register(RecordTableViewCell.self, forCellReuseIdentifier: "Cell")
+        self.tabBarItem = UITabBarItem(title: "Erfassen", image: #imageLiteral(resourceName: "Play"), tag: 0)
     }
 
 
