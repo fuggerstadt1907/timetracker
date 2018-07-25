@@ -42,11 +42,18 @@
                                             <nil key="textColor"/>
                                             <nil key="highlightedColor"/>
                                         </label>
-                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="infoDark" showsTouchWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="0YJ-3A-gHY">
-                                            <rect key="frame" x="336" y="10" width="23" height="22"/>
+                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="0YJ-3A-gHY">
+                                            <rect key="frame" x="336" y="10" width="23" height="18"/>
+                                            <color key="tintColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                            <state key="normal" image="Play">
+                                                <color key="titleColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                            </state>
+                                            <connections>
+                                                <action selector="categoryActionHandler:" destination="q2t-rC-aQu" eventType="touchUpInside" id="G0z-N5-e6A"/>
+                                            </connections>
                                         </button>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="12:45 h" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="U4M-nT-pRL">
-                                            <rect key="frame" x="259" y="11" width="57" height="20"/>
+                                            <rect key="frame" x="259" y="9" width="57" height="20"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                             <nil key="textColor"/>
                                             <nil key="highlightedColor"/>
@@ -67,7 +74,10 @@
                                     </constraints>
                                 </tableViewCellContentView>
                                 <connections>
+                                    <outlet property="categoryActionButton" destination="0YJ-3A-gHY" id="11J-WY-yG5"/>
                                     <outlet property="categoryColorView" destination="GKO-jd-pma" id="j7D-XC-651"/>
+                                    <outlet property="categoryLabel" destination="1RB-da-Eeu" id="yPe-Ji-w4b"/>
+                                    <outlet property="categoryTimeLabel" destination="U4M-nT-pRL" id="woM-Am-gb0"/>
                                 </connections>
                             </tableViewCell>
                         </prototypes>
@@ -115,6 +125,7 @@
                 <tabBarController automaticallyAdjustsScrollViewInsets="NO" id="KHD-8j-wp0" sceneMemberID="viewController">
                     <toolbarItems/>
                     <tabBar key="tabBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="l7D-pr-jaC">
+                        <rect key="frame" x="0.0" y="0.0" width="1000" height="1000"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     </tabBar>
@@ -127,4 +138,7 @@
             <point key="canvasLocation" x="433" y="41"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="Play" width="15" height="16"/>
+    </resources>
 </document>
