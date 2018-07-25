@@ -1,5 +1,5 @@
 //
-//  RecordNavigationController.swift
+//  DashboardViewController.swift
 //  Time-Tracker
 //
 //  Created by Alessandro Orlandi on 25.07.18.
@@ -8,13 +8,12 @@
 
 import UIKit
 
-class RecordNavigationController: UINavigationController {
+class DashboardViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        self.tabBarItem = UITabBarItem(tabBarSystemItem: .history, tag: 0)
-        
+        // Do any additional setup after loading the view.
     }
 
     override func didReceiveMemoryWarning() {
