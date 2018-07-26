@@ -15,10 +15,12 @@ class RecordTableViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        self.title = getCurrentDate()
+        
         tempCategoryItems = [
-            CategoryItem(categoryName: "Test mich", recordedTime: "0:05h", actionButton: #imageLiteral(resourceName: "Play")),
-            CategoryItem(categoryName: "Noch ein Test", recordedTime: "1:15h", actionButton: #imageLiteral(resourceName: "Play")),
-            CategoryItem(categoryName: "Der letzte Test", recordedTime: "0:00h", actionButton: #imageLiteral(resourceName: "Play"))]
+            CategoryItem(categoryName: "Test mich", recordedTime: "0:05h", actionButton: #imageLiteral(resourceName: "Play"), isRecording: false),
+            CategoryItem(categoryName: "Noch ein Test", recordedTime: "1:15h", actionButton: #imageLiteral(resourceName: "Play"), isRecording: false),
+            CategoryItem(categoryName: "Der letzte Test", recordedTime: "0:00h", actionButton: #imageLiteral(resourceName: "Play"), isRecording: false)]
         
         self.tabBarItem = UITabBarItem(title: "Erfassen", image: #imageLiteral(resourceName: "Play"), tag: 0)
     }
@@ -33,7 +35,7 @@ class RecordTableViewController: UITableViewController {
         let saveAction = UIAlertAction(title: "Hinzufügen", style: .default, handler: { alert -> Void in
             let firstTextField = alertController.textFields![0].text
             if alertController.textFields![0].text != "" {
-                self.tempCategoryItems.append(CategoryItem(categoryName: firstTextField, recordedTime: "0:00h", actionButton: #imageLiteral(resourceName: "Play")))
+                self.tempCategoryItems.append(CategoryItem(categoryName: firstTextField, recordedTime: "0:00h", actionButton: #imageLiteral(resourceName: "Play"), isRecording: false))
                 self.tableView.reloadData()
             } else {
                 self.displayAlertWithOkBtn(title: "Fehler beim Speichern", message: "Bitte gib einen Namen für die Kategorie an.")
@@ -66,7 +68,15 @@ class RecordTableViewController: UITableViewController {
         alert.addAction(firstAction)
         self.present(alert, animated: true, completion: nil)
     }
-
+    
+    
+    private func getCurrentDate() -> String {
+        let dateFormatter = DateFormatter()
+        let date = Date()
+        dateFormatter.dateFormat = "EEEE, dd.MM.yyyy"
+        return  dateFormatter.string(from: date)
+    }
+    
     
     override func numberOfSections(in tableView: UITableView) -> Int {
         return 1
