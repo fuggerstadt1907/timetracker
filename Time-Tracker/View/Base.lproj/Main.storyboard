@@ -49,7 +49,7 @@
                                                 <color key="titleColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                             </state>
                                             <connections>
-                                                <action selector="recordTimeHandler:" destination="q2t-rC-aQu" eventType="touchUpInside" id="joC-ZK-TJe"/>
+                                                <action selector="recordTimeHandler:" destination="q2t-rC-aQu" eventType="touchUpInside" id="v2T-ot-uyP"/>
                                             </connections>
                                         </button>
                                     </subviews>
@@ -65,12 +65,13 @@
                                     </constraints>
                                 </tableViewCellContentView>
                                 <connections>
-                                    <outlet property="categoryActionButton" destination="0YJ-3A-gHY" id="ie2-sX-HWb"/>
-                                    <outlet property="categoryLabel" destination="1RB-da-Eeu" id="yPe-Ji-w4b"/>
-                                    <outlet property="categoryTimeLabel" destination="U4M-nT-pRL" id="woM-Am-gb0"/>
+                                    <outlet property="categoryActionButton" destination="0YJ-3A-gHY" id="37H-n2-YDA"/>
+                                    <outlet property="categoryLabel" destination="1RB-da-Eeu" id="DUk-2f-v07"/>
+                                    <outlet property="categoryTimeLabel" destination="U4M-nT-pRL" id="yaG-bh-gFg"/>
                                 </connections>
                             </tableViewCell>
                         </prototypes>
+                        <sections/>
                         <connections>
                             <outlet property="dataSource" destination="2g1-ED-gvs" id="nbO-Wr-NQk"/>
                             <outlet property="delegate" destination="2g1-ED-gvs" id="ce6-cb-Vjr"/>
@@ -87,7 +88,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="o5r-uu-GO1" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1478" y="-418"/>
+            <point key="canvasLocation" x="1695" y="-418"/>
         </scene>
         <!--Dashboard-->
         <scene sceneID="cZp-uH-R97">
@@ -103,7 +104,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="e2S-LE-QRs" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1478" y="505"/>
+            <point key="canvasLocation" x="1694" y="505"/>
         </scene>
         <!--Item-->
         <scene sceneID="Ugt-Ul-H4G">
@@ -148,7 +149,7 @@
                 </tabBarController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="A3h-Hf-dcG" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="359" y="7"/>
+            <point key="canvasLocation" x="167" y="9"/>
         </scene>
         <!--Item-->
         <scene sceneID="J2O-7B-PwY">

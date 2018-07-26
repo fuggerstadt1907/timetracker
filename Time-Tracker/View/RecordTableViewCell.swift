@@ -2,7 +2,7 @@
 //  RecordTableViewCell.swift
 //  Time-Tracker
 //
-//  Created by Alessandro Orlandi on 24.07.18.
+//  Created by Alessandro Orlandi on 26.07.18.
 //  Copyright © 2018 Alessandro Orlandi. All rights reserved.
 //
 
@@ -16,7 +16,7 @@ class RecordTableViewCell: UITableViewCell {
     @IBOutlet weak var categoryActionButton: UIButton!
     
     @IBAction func recordTimeHandler(_ sender: UIButton) {
-        print("Time recorder not implemented yet!")
+        
     }
-    
+
 }
