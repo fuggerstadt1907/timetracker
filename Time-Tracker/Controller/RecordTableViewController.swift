@@ -47,6 +47,11 @@ class RecordTableViewController: UITableViewController {
     
     
     @IBAction func addNewItem(_ sender: UIBarButtonItem) {
+        showInputDialog()
+    }
+    
+    
+    private func showInputDialog(){
         let alertController = UIAlertController(title: "Neue Kategorie", message: "Lege eine neue Kategorie an.", preferredStyle: .alert)
         
         alertController.addTextField { (textField : UITextField!) -> Void in
@@ -59,7 +64,7 @@ class RecordTableViewController: UITableViewController {
                 self.tempCategoryItems.append(CategoryItem(categoryName: firstTextField!, recordedTime: nil))
                 self.tableView.reloadData()
             } else {
-                self.displayAlertWithOkBtn(title: "Fehler beim Speichern", message: "Bitte gib einen Namen für die Kategorie an.")
+                self.displayAlertWithOkBtn(title: "Fehler beim Speichern", message: "Bitte gib einen Namen an.")
                 return
             }
         })
@@ -69,7 +74,6 @@ class RecordTableViewController: UITableViewController {
         alertController.addAction(saveAction)
         self.present(alertController, animated: true, completion: nil)
     }
-    
     
     private func displayAlertWithOkBtn(title: String, message: String){
         let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
@@ -119,6 +123,115 @@ class RecordTableViewController: UITableViewController {
         cell.categoryLabel?.text = tempItem.categoryName
         cell.selectionStyle = .none
         return cell
+    }
+    
+    
+    // More Cell-Slide Actions
+    override func tableView(_ tableView: UITableView,
+                            trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+        
+        // TRASH ACTION
+        let TrashAction = UIContextualAction(style: .normal, title:  "Löschen", handler: { (ac:UIContextualAction, view:UIView, success:(Bool) -> Void) in
+            
+            print("Lösche \(self.tempCategoryItems[indexPath.row].categoryName)")
+            // Delete the row from the data source
+            self.tempCategoryItems.remove(at: indexPath.row)
+            tableView.deleteRows(at: [indexPath], with: .fade)
+            tableView.reloadData()
+            success(true)
+        })
+        TrashAction.backgroundColor = .red
+        
+        // EDIT ACTION
+        let FlagAction = UIContextualAction(style: .normal, title:  "Bearbeiten", handler: { (ac:UIContextualAction, view:UIView, success:(Bool) -> Void) in
+            print("Editing \(self.tempCategoryItems[indexPath.row].categoryName)")
+            //self.showInputToEdit(index: indexPath)
+            self.showInputToEdit(index: indexPath)
+            success(true)
+        })
+        FlagAction.backgroundColor = CategoryColors.NavbarBlue
+        
+        
+        return UISwipeActionsConfiguration(actions: [TrashAction, FlagAction])
+    }
+    
+    
+    func showInputToEdit(index: IndexPath) {
+        // Creating UIAlertController and setting title and message for the alert dialog
+        let alertController = UIAlertController(title: "Item bearbeiten", message: "Bitte passe ggf. den Namen an.", preferredStyle: .alert)
+        
+        // the confirm action taking the inputs
+        let confirmAction = UIAlertAction(title: "Speichern", style: .default) { (_) in
+            
+            // getting the input values from user
+            let name = alertController.textFields?[0].text
+            
+            if alertController.textFields?[0].text != "" {
+                self.updateTodoItem(index: index, name: name!, isDone: false)
+            }
+            else {
+                print("Name ist leer")
+                self.showInputWhenNameWasEmpty()
+            }
+        }
+        
+        // the cancel action doing nothing
+        let cancelAction = UIAlertAction(title: "Abbrechen", style: .cancel) { (_) in }
+        
+        // adding textfields to our dialog box
+        alertController.addTextField { (textField) in
+            textField.placeholder = "Name..."
+            textField.text = self.tempCategoryItems[index.row].categoryName
+        }
+        
+        //adding the action to dialogbox
+        alertController.addAction(confirmAction)
+        alertController.addAction(cancelAction)
+        
+        //finally presenting the dialog box
+        self.present(alertController, animated: true, completion: nil)
+    }
+    
+    
+    func updateTodoItem(index: IndexPath,name: String, isDone: Bool) {
+        tempCategoryItems[index.row].categoryName = name
+        tableView.reloadData()
+    }
+    
+    
+    func showInputWhenNameWasEmpty() {
+        //Creating UIAlertController and setting title and message for the alert dialog
+        let alertController = UIAlertController(title: "Neue Aufgabe", message: "Der Name der Aufgabe darf nicht leer sein!", preferredStyle: .alert)
+        
+        //the confirm action taking the inputs
+        let confirmAction = UIAlertAction(title: "Hinzufügen", style: .default) { (_) in
+            
+            //getting the input values from user
+            let name = alertController.textFields?[0].text
+            
+            if alertController.textFields?[0].text != "" {
+                self.showInputDialog()
+            }
+            else {
+                print("Name ist leer")
+                self.showInputWhenNameWasEmpty()
+            }
+        }
+        
+        // the cancel action doing nothing
+        let cancelAction = UIAlertAction(title: "Abbrechen", style: .cancel) { (_) in }
+        
+        // adding textfields to our dialog box
+        alertController.addTextField { (textField) in
+            textField.placeholder = "Name..."
+        }
+        
+        //adding the action to dialogbox
+        alertController.addAction(confirmAction)
+        alertController.addAction(cancelAction)
+        
+        //finally presenting the dialog box
+        self.present(alertController, animated: true, completion: nil)
     }
  
 }

@@ -36,6 +36,7 @@ class RecordTableViewCell: UITableViewCell {
     
     func startTimer(){
         timer = Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: #selector(updateTimeLabel), userInfo: nil, repeats: true)
+        
     }
     
     
@@ -43,12 +44,15 @@ class RecordTableViewCell: UITableViewCell {
         time += 1
         self.categoryTimeLabel.text = "\(timeFormatted(time))"
         categoryActionButton.setImage(#imageLiteral(resourceName: "pauseIcon"), for: .normal)
+        self.backgroundColor = CategoryColors.NavbarBlue
+
     }
     
     
     func stopTimer(){
         categoryActionButton.setImage(#imageLiteral(resourceName: "playIcon"), for: .normal)
         timer.invalidate()
+        self.backgroundColor = nil
     }
     
     

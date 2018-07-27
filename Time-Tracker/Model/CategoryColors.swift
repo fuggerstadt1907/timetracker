@@ -20,6 +20,7 @@ enum CategoryColors {
     static let Purple = UIColor(red: 88/255, green: 86/255, blue: 214/255, alpha: 1.0)
     static let Pink = UIColor(red: 255/255, green: 45/255, blue: 85/255, alpha: 1.0)
     static let Turquoise = UIColor(red: 76/255, green: 217/255, blue: 174/255, alpha: 1.0)
+    static let NavbarBlue = UIColor(red: 136/255, green: 235/255, blue: 255/255, alpha: 1.0)
 }
 
 // This still works as expected!
