@@ -15,7 +15,7 @@
             <objects>
                 <tableViewController id="2g1-ED-gvs" customClass="RecordTableViewController" customModule="Time_Tracker" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" id="Y3J-q4-Pur">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="672"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="589"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <prototypes>
@@ -94,14 +94,14 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="o5r-uu-GO1" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1695" y="-418"/>
+            <point key="canvasLocation" x="1694" y="-208"/>
         </scene>
         <!--Dashboard-->
         <scene sceneID="cZp-uH-R97">
             <objects>
                 <viewController id="R4Y-Xs-vHr" customClass="DashboardViewController" customModule="Time_Tracker" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="4Wa-hy-xYK">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="672"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="589"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <viewLayoutGuide key="safeArea" id="QS8-9w-xtc"/>
@@ -110,13 +110,46 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="e2S-LE-QRs" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1694" y="505"/>
+            <point key="canvasLocation" x="1694" y="451"/>
         </scene>
-        <!--Item-->
+        <!--Übersicht-->
+        <scene sceneID="5Zk-ZN-lIa">
+            <objects>
+                <viewController id="nJV-9R-KxI" customClass="OverviewViewController" customModule="Time_Tracker" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="xaP-gV-kwa">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="589"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="eEj-Ra-f09">
+                                <rect key="frame" x="16" y="25" width="343" height="29"/>
+                                <segments>
+                                    <segment title="Tag"/>
+                                    <segment title="Woche"/>
+                                    <segment title="Monat"/>
+                                    <segment title="Jahr"/>
+                                </segments>
+                                <color key="tintColor" red="0.0" green="0.92156862750000001" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                            </segmentedControl>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="eEj-Ra-f09" firstAttribute="leading" secondItem="Yfu-Ah-Iii" secondAttribute="leading" constant="16" id="bAd-jK-xZQ"/>
+                            <constraint firstItem="eEj-Ra-f09" firstAttribute="top" secondItem="Yfu-Ah-Iii" secondAttribute="top" constant="25" id="u6X-eW-Gai"/>
+                            <constraint firstItem="Yfu-Ah-Iii" firstAttribute="trailing" secondItem="eEj-Ra-f09" secondAttribute="trailing" constant="16" id="y7d-Jm-I4u"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="Yfu-Ah-Iii"/>
+                    </view>
+                    <navigationItem key="navigationItem" title="Übersicht" id="kzt-7o-Jgu"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Dan-ed-Eqy" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1693.5999999999999" y="1127.5862068965519"/>
+        </scene>
+        <!--Erfassen-->
         <scene sceneID="Ugt-Ul-H4G">
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="IVX-xw-q6J" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Item" id="j52-Na-0xU"/>
+                    <tabBarItem key="tabBarItem" title="Erfassen" selectedImage="RecentIcon" id="j52-Na-0xU"/>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" translucent="NO" largeTitles="YES" id="OzZ-c1-l9u">
                         <rect key="frame" x="0.0" y="44" width="375" height="96"/>
@@ -136,14 +169,14 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="8me-Eq-IO5" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="974" y="-418"/>
+            <point key="canvasLocation" x="974" y="-208"/>
         </scene>
         <!--Tab Bar Controller-->
         <scene sceneID="auk-qU-kvs">
             <objects>
                 <tabBarController automaticallyAdjustsScrollViewInsets="NO" id="h8h-iU-n4p" sceneMemberID="viewController">
                     <toolbarItems/>
-                    <tabBar key="tabBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="lqE-kg-3da">
+                    <tabBar key="tabBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" translucent="NO" id="lqE-kg-3da">
                         <rect key="frame" x="0.0" y="0.0" width="1000" height="1000"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -151,17 +184,18 @@
                     <connections>
                         <segue destination="IVX-xw-q6J" kind="relationship" relationship="viewControllers" id="Egx-2z-A1b"/>
                         <segue destination="FcI-fd-Efg" kind="relationship" relationship="viewControllers" id="L24-ns-aZn"/>
+                        <segue destination="6cG-SE-MMt" kind="relationship" relationship="viewControllers" id="ECG-EN-MxI"/>
                     </connections>
                 </tabBarController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="A3h-Hf-dcG" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="167" y="9"/>
         </scene>
-        <!--Item-->
+        <!--Dashboard-->
         <scene sceneID="J2O-7B-PwY">
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="FcI-fd-Efg" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Item" id="Yb6-KE-7yI"/>
+                    <tabBarItem key="tabBarItem" title="Dashboard" image="DashboardIcon" selectedImage="DashboardIcon" id="Yb6-KE-7yI"/>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" translucent="NO" largeTitles="YES" id="JV8-hH-buK">
                         <rect key="frame" x="0.0" y="44" width="375" height="96"/>
@@ -181,10 +215,39 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="IMb-xk-n6b" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="974" y="505"/>
+            <point key="canvasLocation" x="974" y="452"/>
+        </scene>
+        <!--Übersicht-->
+        <scene sceneID="tzX-PS-aO9">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="6cG-SE-MMt" sceneMemberID="viewController">
+                    <tabBarItem key="tabBarItem" title="Übersicht" image="OverviewIcon" selectedImage="OverviewIcon" id="QxU-pm-rap"/>
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" translucent="NO" largeTitles="YES" id="e0q-xE-4BI">
+                        <rect key="frame" x="0.0" y="44" width="375" height="96"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                        <color key="barTintColor" red="0.53333333329999999" green="0.92156862750000001" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                        <textAttributes key="titleTextAttributes">
+                            <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        </textAttributes>
+                        <textAttributes key="largeTitleTextAttributes">
+                            <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        </textAttributes>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="nJV-9R-KxI" kind="relationship" relationship="rootViewController" id="eXM-R7-8j7"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="exx-VA-hde" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="974" y="1128"/>
         </scene>
     </scenes>
     <resources>
+        <image name="DashboardIcon" width="29" height="29"/>
+        <image name="OverviewIcon" width="30" height="30"/>
+        <image name="RecentIcon" width="29" height="29"/>
         <image name="playIcon" width="15" height="16"/>
     </resources>
 </document>

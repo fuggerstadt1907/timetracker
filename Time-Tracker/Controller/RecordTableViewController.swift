@@ -41,7 +41,8 @@ class RecordTableViewController: UITableViewController {
         
         self.title = getCurrentDate()
         self.tableView.delaysContentTouches = false
-        self.tabBarItem = UITabBarItem(title: "Erfassen", image: #imageLiteral(resourceName: "playIcon"), tag: 0)
+        self.tabBarItem = UITabBarItem(title: "Erfassen", image: #imageLiteral(resourceName: "RecentIcon"), tag: 0)
+
     }
     
     

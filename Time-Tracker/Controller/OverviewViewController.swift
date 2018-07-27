@@ -1,23 +1,24 @@
 //
-//  DashboardViewController.swift
+//  OverviewViewController.swift
 //  Time-Tracker
 //
-//  Created by Alessandro Orlandi on 25.07.18.
+//  Created by Alessandro Orlandi on 27.07.18.
 //  Copyright © 2018 Alessandro Orlandi. All rights reserved.
 //
 
 import UIKit
 
-class DashboardViewController: UIViewController {
+class OverviewViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        self.tabBarItem = UITabBarItem(title: "Dashboard", image: #imageLiteral(resourceName: "DashboardIcon"), tag: 1)
+        // Do any additional setup after loading the view.
     }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
+        // Dispose of any resources that can be recreated.
     }
     
 
