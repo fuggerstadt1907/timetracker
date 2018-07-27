@@ -45,7 +45,7 @@
                                                 <constraint firstAttribute="width" constant="30" id="hDa-i3-SIr"/>
                                             </constraints>
                                             <color key="tintColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                            <state key="normal" image="Play">
+                                            <state key="normal" image="playIcon">
                                                 <color key="titleColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                             </state>
                                             <connections>
@@ -78,6 +78,12 @@
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" title="Montag, 23.07.2018" id="v5R-0f-HXg">
+                        <barButtonItem key="leftBarButtonItem" systemItem="refresh" id="w9s-pn-Rf4">
+                            <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            <connections>
+                                <action selector="resetAllTimers:" destination="2g1-ED-gvs" id="DEd-Y8-Faj"/>
+                            </connections>
+                        </barButtonItem>
                         <barButtonItem key="rightBarButtonItem" systemItem="add" id="DR9-jq-uEE">
                             <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             <connections>
@@ -179,6 +185,6 @@
         </scene>
     </scenes>
     <resources>
-        <image name="Play" width="15" height="16"/>
+        <image name="playIcon" width="15" height="16"/>
     </resources>
 </document>

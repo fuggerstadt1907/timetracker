@@ -10,11 +10,29 @@ import UIKit
 
 class RecordTableViewController: UITableViewController {
     
-    
-    
     var tempCategoryItems = [CategoryItem]()
-    var countdownTimer: Timer!
+    var countdownTimer = [Timer]()
     var totalTime = 0
+    
+    @IBAction func resetAllTimers(_ sender: UIBarButtonItem) {
+        let indexPathsArray = tableView.indexPathsForVisibleRows
+        for indexPath in indexPathsArray! {
+            let cell = tableView.cellForRow(at: indexPath) as! RecordTableViewCell
+            if cell.isRecording {
+                cell.timer.invalidate()
+                cell.categoryTimeLabel.text = "00:00:00"
+                cell.time = 0
+                cell.categoryActionButton.setImage(#imageLiteral(resourceName: "playIcon"), for: .normal)
+                cell.isRecording = false
+                print("All Timers stopped and set to 0")
+            }
+            else {
+                cell.categoryTimeLabel.text = "00:00:00"
+                cell.time = 0
+                cell.categoryActionButton.setImage(#imageLiteral(resourceName: "playIcon"), for: .normal)
+            }
+        }
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -22,12 +40,11 @@ class RecordTableViewController: UITableViewController {
         self.title = getCurrentDate()
         
         tempCategoryItems = [
-            CategoryItem(categoryName: "Test mich", recordedTime: "0:05h", actionButton: #imageLiteral(resourceName: "Play"), isRecording: false),
-            CategoryItem(categoryName: "Noch ein Test", recordedTime: "1:15h", actionButton: #imageLiteral(resourceName: "Play"), isRecording: false),
-            CategoryItem(categoryName: "Der letzte Test", recordedTime: "0:00h", actionButton: #imageLiteral(resourceName: "Play"), isRecording: false)]
+            CategoryItem(categoryName: "Testprojekt")]
         
-        self.tabBarItem = UITabBarItem(title: "Erfassen", image: #imageLiteral(resourceName: "Play"), tag: 0)
+        self.tabBarItem = UITabBarItem(title: "Erfassen", image: #imageLiteral(resourceName: "playIcon"), tag: 0)
     }
+    
     
     @IBAction func addNewItem(_ sender: UIBarButtonItem) {
         let alertController = UIAlertController(title: "Neue Kategorie", message: "Lege eine neue Kategorie an.", preferredStyle: .alert)
@@ -39,7 +56,7 @@ class RecordTableViewController: UITableViewController {
         let saveAction = UIAlertAction(title: "Hinzufügen", style: .default, handler: { alert -> Void in
             let firstTextField = alertController.textFields![0].text
             if alertController.textFields![0].text != "" {
-                self.tempCategoryItems.append(CategoryItem(categoryName: firstTextField, recordedTime: "0:00h", actionButton: #imageLiteral(resourceName: "Play"), isRecording: false))
+                self.tempCategoryItems.append(CategoryItem(categoryName: firstTextField))
                 self.tableView.reloadData()
             } else {
                 self.displayAlertWithOkBtn(title: "Fehler beim Speichern", message: "Bitte gib einen Namen für die Kategorie an.")
@@ -82,29 +99,15 @@ class RecordTableViewController: UITableViewController {
     }
     
     
-    public func startTimer() {
-        countdownTimer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(updateTime), userInfo: nil, repeats: true)
-    }
-    
-    @objc private func updateTime(atIndex: IndexPath) {
-        tempCategoryItems[atIndex.row].recordedTime = "\(timeFormatted(totalTime))"
-    }
-    
-    func endTimer() {
-        countdownTimer.invalidate()
-    }
-    
-    func timeFormatted(_ totalSeconds: Int) -> String {
-        let seconds: Int = totalSeconds % 60
-        let minutes: Int = (totalSeconds / 60) % 60
-        //     let hours: Int = totalSeconds / 3600
-        return String(format: "%02d:%02d", minutes, seconds)
-    }
-    
     override func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
-
+    
+    
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        print("Row with Index \(indexPath.row) selected")
+    }
+    
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return tempCategoryItems.count
@@ -115,12 +118,8 @@ class RecordTableViewController: UITableViewController {
         let tempItem = tempCategoryItems[indexPath.row]
         let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath) as! RecordTableViewCell
         cell.categoryLabel?.text = tempItem.categoryName
-        cell.categoryTimeLabel?.text = tempItem.recordedTime
+        cell.categoryTimeLabel?.text = "00:00:00"
         return cell
-    }
-    
-    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        print(indexPath.row)
     }
  
 }

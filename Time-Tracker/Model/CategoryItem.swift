@@ -11,8 +11,6 @@ import UIKit
 
 struct CategoryItem {
     var categoryName: String?
-    var recordedTime: String?
-    var actionButton: UIImage?
-    var isRecording: Bool? 
+//    var recordedTime: String?
 }
 
