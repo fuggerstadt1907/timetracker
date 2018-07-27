@@ -10,7 +10,7 @@ import Foundation
 import UIKit
 
 struct CategoryItem {
-    var categoryName: String?
-//    var recordedTime: String?
+    var categoryName: String
+    var recordedTime: String?
 }
 

@@ -37,11 +37,10 @@ class RecordTableViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        tempCategoryItems = [CategoryItem(categoryName: "Testprojekt", recordedTime: nil)]
+        
         self.title = getCurrentDate()
-        
-        tempCategoryItems = [
-            CategoryItem(categoryName: "Testprojekt")]
-        
+        self.tableView.delaysContentTouches = false
         self.tabBarItem = UITabBarItem(title: "Erfassen", image: #imageLiteral(resourceName: "playIcon"), tag: 0)
     }
     
@@ -56,7 +55,7 @@ class RecordTableViewController: UITableViewController {
         let saveAction = UIAlertAction(title: "Hinzufügen", style: .default, handler: { alert -> Void in
             let firstTextField = alertController.textFields![0].text
             if alertController.textFields![0].text != "" {
-                self.tempCategoryItems.append(CategoryItem(categoryName: firstTextField))
+                self.tempCategoryItems.append(CategoryItem(categoryName: firstTextField!, recordedTime: nil))
                 self.tableView.reloadData()
             } else {
                 self.displayAlertWithOkBtn(title: "Fehler beim Speichern", message: "Bitte gib einen Namen für die Kategorie an.")
@@ -117,9 +116,7 @@ class RecordTableViewController: UITableViewController {
         let tempItem = tempCategoryItems[indexPath.row]
         let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath) as! RecordTableViewCell
         cell.categoryLabel?.text = tempItem.categoryName
-        cell.categoryTimeLabel?.text = "00:00:00"
         cell.selectionStyle = .none
-        
         return cell
     }
  

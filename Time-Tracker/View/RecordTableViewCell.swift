@@ -11,7 +11,6 @@ import UIKit
 class RecordTableViewCell: UITableViewCell {
     
     var timer: Timer!
-    var totalTime = "1:15 Std."
     var isRecording = false
     var time = 0
 
@@ -19,45 +18,35 @@ class RecordTableViewCell: UITableViewCell {
     @IBOutlet weak var categoryLabel: UILabel!
     @IBOutlet weak var categoryTimeLabel: UILabel!
     @IBOutlet weak var categoryActionButton: UIButton!
-    
     @IBAction func recordTimeHandler(_ sender: UIButton) {
         buttonPressed()
     }
     
     
     @objc func buttonPressed() {
-        print("Bool when Button is pressed \(isRecording)")
         toggleButton(bool: !isRecording)
     }
     
     
     func toggleButton(bool: Bool){
         isRecording = bool
-        switch isRecording {
-        case true:
-            startTimer()
-        case false:
-            stopTimer()
-        }
+        isRecording ? startTimer() : stopTimer()
     }
     
     
     func startTimer(){
-        print("startTimer called... isRecording = \(isRecording)")
         timer = Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: #selector(updateTimeLabel), userInfo: nil, repeats: true)
     }
     
     
     @objc func updateTimeLabel(){
-        print("updateTimeLabel() called...")
-        categoryActionButton.setImage(#imageLiteral(resourceName: "pauseIcon"), for: .normal)
         time += 1
         self.categoryTimeLabel.text = "\(timeFormatted(time))"
+        categoryActionButton.setImage(#imageLiteral(resourceName: "pauseIcon"), for: .normal)
     }
     
     
     func stopTimer(){
-        print("stopTimer() called...")
         categoryActionButton.setImage(#imageLiteral(resourceName: "playIcon"), for: .normal)
         timer.invalidate()
     }
