@@ -105,7 +105,6 @@ class RecordTableViewController: UITableViewController {
     
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        print("Row with Index \(indexPath.row) selected")
     }
     
     
@@ -119,6 +118,8 @@ class RecordTableViewController: UITableViewController {
         let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath) as! RecordTableViewCell
         cell.categoryLabel?.text = tempItem.categoryName
         cell.categoryTimeLabel?.text = "00:00:00"
+        cell.selectionStyle = .none
+        
         return cell
     }
  
