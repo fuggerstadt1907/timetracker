@@ -7,13 +7,19 @@
 //
 
 import UIKit
+import FirebaseFirestore
 
 class RecordTableViewController: UITableViewController {
     
+    
+    // CUSTOM VARIABLES
     var tempCategoryItems = [CategoryItem]()
     var countdownTimer = [Timer]()
     var totalTime = 0
     
+    
+    // TABLEVIEW CONTROLLER OUTLETS
+    // FUNCTION THAT IS CALLED TO RESET ALL TIMERS
     @IBAction func resetAllTimers(_ sender: UIBarButtonItem) {
         let indexPathsArray = tableView.indexPathsForVisibleRows
         for indexPath in indexPathsArray! {
@@ -34,23 +40,45 @@ class RecordTableViewController: UITableViewController {
         }
     }
     
+    // VIEW DID LOAD
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         tempCategoryItems = [CategoryItem(categoryName: "Testprojekt", recordedTime: nil)]
+        
+        let db = Firestore.firestore()
+        db.collection("Items").whereField("Items", isEqualTo: "Test").getDocuments { (snapshot, error) in
+            if error != nil {
+                print(error)
+            } else {
+                for document in (snapshot?.documents)! {
+                    if let name = document.data()["name"] as? String {
+                        self.displayAlertWithOkBtn(title: "Information", message: "Your name is \(name)")
+                    }
+                }
+            }
+        }
         
         self.title = getCurrentDate()
         self.tableView.delaysContentTouches = false
         self.tabBarItem = UITabBarItem(title: "Erfassen", image: #imageLiteral(resourceName: "RecentIcon"), tag: 0)
-
     }
     
     
+    // TEST FUNCTION FOR FIREBASE DB
+//    private func addItemToFireBaseDB(newValue: String){
+//
+//    }
+
+    
+    
+    // FUNCTION THAT IS CALLED TO ADD A NEW ITEM
     @IBAction func addNewItem(_ sender: UIBarButtonItem) {
         showInputDialog()
+        //addItemToFireBaseDB(newValue: "hatsgeklapt?")
     }
     
     
+    // FUNCTION THAT IS CALLED TO SHOW DIALOG FOR NEW ITEM
     private func showInputDialog(){
         let alertController = UIAlertController(title: "Neue Kategorie", message: "Lege eine neue Kategorie an.", preferredStyle: .alert)
         
@@ -75,6 +103,8 @@ class RecordTableViewController: UITableViewController {
         self.present(alertController, animated: true, completion: nil)
     }
     
+    
+    // FUNCTION THAT IS CALLED TO BUID AN ALERT WITH OK BUTTON
     private func displayAlertWithOkBtn(title: String, message: String){
         let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
         let alertAction = UIAlertAction(title: "Okay", style: .default, handler: { _ in })
@@ -83,6 +113,7 @@ class RecordTableViewController: UITableViewController {
     }
     
     
+    // FUNCTION THAT IS CALLED TO BUILD AN ALERT WITH TWO BUTTONS
     private func displayAlertWithTwoBtns(title: String, message: String, actionBtnText: String, cancelBtnText: String){
         let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
         let firstAction = UIAlertAction(title: actionBtnText, style: .default) { alert -> Void in
@@ -95,6 +126,7 @@ class RecordTableViewController: UITableViewController {
     }
     
     
+    // FUNCTION THAT IS CALLED TO GET THE CURRENT DAY AND DATE
     private func getCurrentDate() -> String {
         let dateFormatter = DateFormatter()
         let date = Date()
@@ -103,20 +135,19 @@ class RecordTableViewController: UITableViewController {
     }
     
     
+    // FUNCTION THAT IS CALLED TO SET THE NUMBER OF SECTIONS IN THE TABLEVIEW
     override func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
     
     
-    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-    }
-    
-    
+    // FUNCTION THAT IS CALLED TO SET THE NUMBER OF ROWS IN THE TABLEVIEW
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return tempCategoryItems.count
     }
 
     
+    // FUNCTION THAT IS CALLED TO STYLE THE TABLEVIEW CELL
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let tempItem = tempCategoryItems[indexPath.row]
         let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath) as! RecordTableViewCell
@@ -126,7 +157,7 @@ class RecordTableViewController: UITableViewController {
     }
     
     
-    // More Cell-Slide Actions
+    // FUNCTION THAT IS CALLED TO STYLE AND CODE THE TABLEVIEW CELL SWIPE ACTION
     override func tableView(_ tableView: UITableView,
                             trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
         
@@ -156,16 +187,13 @@ class RecordTableViewController: UITableViewController {
     }
     
     
+    // FUNCTION THAT IS CALLED TO EDIT EXISTING ITEM IN TABLEVIEW VIA SWIPE GESTURE
     func showInputToEdit(index: IndexPath) {
-        // Creating UIAlertController and setting title and message for the alert dialog
         let alertController = UIAlertController(title: "Item bearbeiten", message: "Bitte passe ggf. den Namen an.", preferredStyle: .alert)
-        
-        // the confirm action taking the inputs
         let confirmAction = UIAlertAction(title: "Speichern", style: .default) { (_) in
             
             // getting the input values from user
             let name = alertController.textFields?[0].text
-            
             if alertController.textFields?[0].text != "" {
                 self.updateTodoItem(index: index, name: name!, isDone: false)
             }
@@ -175,7 +203,6 @@ class RecordTableViewController: UITableViewController {
             }
         }
         
-        // the cancel action doing nothing
         let cancelAction = UIAlertAction(title: "Abbrechen", style: .cancel) { (_) in }
         
         // adding textfields to our dialog box
@@ -184,31 +211,25 @@ class RecordTableViewController: UITableViewController {
             textField.text = self.tempCategoryItems[index.row].categoryName
         }
         
-        //adding the action to dialogbox
         alertController.addAction(confirmAction)
         alertController.addAction(cancelAction)
         
-        //finally presenting the dialog box
         self.present(alertController, animated: true, completion: nil)
     }
     
     
+    // FUNCTION THAT IS CALLED TO UPDATE AN ITEM
     func updateTodoItem(index: IndexPath,name: String, isDone: Bool) {
         tempCategoryItems[index.row].categoryName = name
         tableView.reloadData()
     }
     
-    
+    // FUNCTION THAT IS CALLED TO SHOW AN ERROR ALERT WHEN INPUT WAS EMPTY
     func showInputWhenNameWasEmpty() {
-        //Creating UIAlertController and setting title and message for the alert dialog
         let alertController = UIAlertController(title: "Neue Aufgabe", message: "Der Name der Aufgabe darf nicht leer sein!", preferredStyle: .alert)
-        
-        //the confirm action taking the inputs
         let confirmAction = UIAlertAction(title: "Hinzufügen", style: .default) { (_) in
             
             //getting the input values from user
-            let name = alertController.textFields?[0].text
-            
             if alertController.textFields?[0].text != "" {
                 self.showInputDialog()
             }
@@ -218,7 +239,6 @@ class RecordTableViewController: UITableViewController {
             }
         }
         
-        // the cancel action doing nothing
         let cancelAction = UIAlertAction(title: "Abbrechen", style: .cancel) { (_) in }
         
         // adding textfields to our dialog box
@@ -226,11 +246,9 @@ class RecordTableViewController: UITableViewController {
             textField.placeholder = "Name..."
         }
         
-        //adding the action to dialogbox
         alertController.addAction(confirmAction)
         alertController.addAction(cancelAction)
         
-        //finally presenting the dialog box
         self.present(alertController, animated: true, completion: nil)
     }
  
