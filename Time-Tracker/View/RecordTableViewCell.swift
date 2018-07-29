@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import FirebaseFirestore
 
 class RecordTableViewCell: UITableViewCell {
     
@@ -15,7 +16,22 @@ class RecordTableViewCell: UITableViewCell {
     var isRecording = false
     var time = 0
     
+    // FIREBASE VARIABLES
+    //let timestamp: Timestamp
+    //let date: Date
+    //timestamp = DocumentSnapshot.get("created_at") as! Timestamp
+    //date = timestamp.dateValue()
+    
+    let db = Firestore.firestore()
+    let settings = FirestoreSettings()
+    let dbCollection = "Items"
+    
+    override func awakeFromNib() {
+        settings.areTimestampsInSnapshotsEnabled = true
+        db.settings = settings
+    }
 
+    
     // TABLEVIEW CELL OUTLETS
     @IBOutlet weak var categoryLabel: UILabel!
     @IBOutlet weak var categoryTimeLabel: UILabel!
@@ -24,7 +40,41 @@ class RecordTableViewCell: UITableViewCell {
         buttonPressed()
     }
     
+    private func getShortDate() -> String {
+        let dateFormatter = DateFormatter()
+        let date = Date()
+        dateFormatter.dateFormat = "dd.MM.yyyy"
+        return  dateFormatter.string(from: date)
+    }
     
+    
+    //
+    func saveAfterCheckToDB(name: String, hasRecords: Bool, recordedTime: String){
+        let docRef = db.collection("\(dbCollection) (\(getShortDate()))").document(name)
+        docRef.getDocument { (document, error) in
+            if let document = document {
+                if document.exists {
+                    print("Document data already exists!)")
+                } else {
+                    docRef.setData([
+                        "name": name,
+                        "hasRecords": hasRecords,
+                        "recordedTime": recordedTime,
+                        "createdAt": "not done yet"
+                        ], completion: { (error: Error?) in
+                            if let error = error {
+                                print("Error while saving into DB... \(error.localizedDescription)")
+                            }
+                            else {
+                                print("DB Transfer successfull.")
+                            }
+                    })
+                }
+            }
+        }
+    }
+    
+  
     // FUNCTION THAT IS CALLED, WENN PLAY/PAUSE BUTTON IS PRESSED
     @objc func buttonPressed() {
         toggleButton(bool: !isRecording)
@@ -70,6 +120,5 @@ class RecordTableViewCell: UITableViewCell {
         let hours: Int = (totalSeconds / 3600)
         return String(format: "%02d:%02d:%02d", hours, minutes, seconds)
     }
-
-
+    
 }

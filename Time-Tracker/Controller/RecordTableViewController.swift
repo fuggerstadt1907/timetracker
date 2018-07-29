@@ -8,6 +8,8 @@
 
 import UIKit
 import FirebaseFirestore
+import Crashlytics
+
 
 class RecordTableViewController: UITableViewController {
     
@@ -16,6 +18,7 @@ class RecordTableViewController: UITableViewController {
     var tempCategoryItems = [CategoryItem]()
     var countdownTimer = [Timer]()
     var totalTime = 0
+    
     
     
     // TABLEVIEW CONTROLLER OUTLETS
@@ -40,23 +43,20 @@ class RecordTableViewController: UITableViewController {
         }
     }
     
+    
+    @IBAction func moveToFirebaseDB(_ sender: UIBarButtonItem) {
+        let indexPathsArray = tableView.indexPathsForVisibleRows
+        for indexPath in indexPathsArray! {
+            let cell = tableView.cellForRow(at: indexPath) as! RecordTableViewCell
+            cell.saveAfterCheckToDB(name: cell.categoryLabel.text!, hasRecords: true, recordedTime: cell.categoryTimeLabel.text!)
+        }
+    }
+    
+    
     // VIEW DID LOAD
     override func viewDidLoad() {
         super.viewDidLoad()
         tempCategoryItems = [CategoryItem(categoryName: "Testprojekt", recordedTime: nil)]
-        
-        let db = Firestore.firestore()
-        db.collection("Items").whereField("Items", isEqualTo: "Test").getDocuments { (snapshot, error) in
-            if error != nil {
-                print(error)
-            } else {
-                for document in (snapshot?.documents)! {
-                    if let name = document.data()["name"] as? String {
-                        self.displayAlertWithOkBtn(title: "Information", message: "Your name is \(name)")
-                    }
-                }
-            }
-        }
         
         self.title = getCurrentDate()
         self.tableView.delaysContentTouches = false
@@ -64,17 +64,10 @@ class RecordTableViewController: UITableViewController {
     }
     
     
-    // TEST FUNCTION FOR FIREBASE DB
-//    private func addItemToFireBaseDB(newValue: String){
-//
-//    }
-
-    
     
     // FUNCTION THAT IS CALLED TO ADD A NEW ITEM
     @IBAction func addNewItem(_ sender: UIBarButtonItem) {
         showInputDialog()
-        //addItemToFireBaseDB(newValue: "hatsgeklapt?")
     }
     
     
@@ -133,7 +126,7 @@ class RecordTableViewController: UITableViewController {
         dateFormatter.dateFormat = "EEEE, dd.MM.yyyy"
         return  dateFormatter.string(from: date)
     }
-    
+        
     
     // FUNCTION THAT IS CALLED TO SET THE NUMBER OF SECTIONS IN THE TABLEVIEW
     override func numberOfSections(in tableView: UITableView) -> Int {
