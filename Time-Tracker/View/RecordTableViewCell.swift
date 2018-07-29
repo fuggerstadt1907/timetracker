@@ -48,13 +48,13 @@ class RecordTableViewCell: UITableViewCell {
     }
     
     
-    //
+    // FUNCTION THAT IS CALLED TO PUSH DATA IN TO DB
     func saveAfterCheckToDB(name: String, hasRecords: Bool, recordedTime: String){
         let docRef = db.collection("\(dbCollection) (\(getShortDate()))").document(name)
         docRef.getDocument { (document, error) in
             if let document = document {
                 if document.exists {
-                    print("Document data already exists!)")
+                    print("Document data already exists!")
                 } else {
                     docRef.setData([
                         "name": name,
@@ -75,7 +75,7 @@ class RecordTableViewCell: UITableViewCell {
     }
     
   
-    // FUNCTION THAT IS CALLED, WENN PLAY/PAUSE BUTTON IS PRESSED
+    // FUNCTION THAT IS CALLED, WHEN PLAY/PAUSE BUTTON IS PRESSED
     @objc func buttonPressed() {
         toggleButton(bool: !isRecording)
     }
