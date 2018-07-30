@@ -17,11 +17,6 @@ class RecordTableViewCell: UITableViewCell {
     var time = 0
     
     // FIREBASE VARIABLES
-    //let timestamp: Timestamp
-    //let date: Date
-    //timestamp = DocumentSnapshot.get("created_at") as! Timestamp
-    //date = timestamp.dateValue()
-    
     let db = Firestore.firestore()
     let settings = FirestoreSettings()
     let dbCollection = "Items"
@@ -50,9 +45,9 @@ class RecordTableViewCell: UITableViewCell {
     
     // FUNCTION THAT IS CALLED TO PUSH DATA IN TO DB
     func saveAfterCheckToDB(name: String, recordedTime: String){
+        self.displayLoadingIndicator(displayedMessage: "Bitte warten ...")
         
         let hasRecords: Bool
-        
         if recordedTime == "00:00:00"{
             hasRecords = false
         } else {
@@ -63,24 +58,51 @@ class RecordTableViewCell: UITableViewCell {
         docRef.getDocument { (document, error) in
             if let document = document {
                 if document.exists {
+                    self.dismissLoadingIndicator(animated: true)
                     print("Document data already exists!")
+                    self.displayAlertWithOkBtn(title: "Fehler beim Speichern", message: "Es existiert bereits ein Datensatz für \n''\(docRef.documentID)'' \nin der Datenbank!")
                 } else {
                     docRef.setData([
                         "name": name,
                         "hasRecords": hasRecords,
                         "recordedTime": recordedTime,
-                        "createdAt": "not done yet"
+                        "createdAt": FieldValue.serverTimestamp()
                         ], completion: { (error: Error?) in
                             if let error = error {
+                                self.dismissLoadingIndicator(animated: true)
                                 print("Error while saving into DB... \(error.localizedDescription)")
                             }
                             else {
+                                self.dismissLoadingIndicator(animated: true)
                                 print("DB Transfer successfull.")
+                                self.displayAlertWithOkBtn(title: "Daten wurden gespeichert", message: "Die Daten wurden erfolgreich in die DB gespeichert.")
                             }
                     })
                 }
             }
         }
+    }
+    
+    
+    // FUNCTION THAT IS CALLED TO SET TIMESTAMP
+    func getDataFromDB(name: String){
+        
+//        let timestamp: Timestamp = documentSnapshot.get("created_at") as! Timestamp
+//        let date: Date = timestamp.dateValue()
+        
+        // Create a reference to the cities collection
+        let itemRef = db.collection(dbCollection)
+        
+        // Create a query against the collection.
+        let query = itemRef.whereField("createdAt", isEqualTo: getCurrentDate())
+        print("Query \(query)")
+    }
+    
+    private func getCurrentDate() -> String {
+        let dateFormatter = DateFormatter()
+        let date = Date()
+        dateFormatter.dateFormat = "dd.MM.yyyy"
+        return  dateFormatter.string(from: date)
     }
     
   
@@ -128,6 +150,39 @@ class RecordTableViewCell: UITableViewCell {
         let minutes: Int = (totalSeconds / 60) % 60
         let hours: Int = (totalSeconds / 3600)
         return String(format: "%02d:%02d:%02d", hours, minutes, seconds)
+    }
+    
+    
+    // FUNCTION THAT IS CALLED TO BUID AN ALERT WITH OK BUTTON
+    private func displayAlertWithOkBtn(title: String, message: String){
+        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        let alertAction = UIAlertAction(title: "Okay", style: .default, handler: { _ in })
+        alert.addAction(alertAction)
+        UIApplication.shared.keyWindow?.rootViewController?.present(alert, animated: true, completion: nil)
+        //self.present(alert, animated: true, completion: nil)
+    }
+    
+    
+    // FUNCTION THAT IS CALLED TO SHOW LOADING INDICATOR
+    private func displayLoadingIndicator(displayedMessage: String){
+        let alert = UIAlertController(title: nil, message: displayedMessage, preferredStyle: .alert)
+        
+        let loadingIndicator = UIActivityIndicatorView(frame: CGRect(x: 10, y: 5, width: 50, height: 50))
+        loadingIndicator.hidesWhenStopped = true
+        loadingIndicator.activityIndicatorViewStyle = UIActivityIndicatorViewStyle.gray
+        loadingIndicator.startAnimating();
+        
+        alert.view.addSubview(loadingIndicator)
+        UIApplication.shared.keyWindow?.rootViewController?.present(alert, animated: true, completion: nil)
+    }
+    
+    
+    // FUNCTION THAT IS CALLED TO DISMISS A LOADING INDICATOR
+    private func dismissLoadingIndicator(animated: Bool){
+        let loadingIndicator = UIActivityIndicatorView(frame: CGRect(x: 10, y: 5, width: 50, height: 50))
+        loadingIndicator.stopAnimating()
+        
+        UIApplication.shared.keyWindow?.rootViewController?.dismiss(animated: animated, completion: nil)
     }
     
 }
