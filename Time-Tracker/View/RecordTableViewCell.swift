@@ -77,33 +77,44 @@ class RecordTableViewCell: UITableViewCell {
                             else {
                                 self.dismissLoadingIndicator(animated: true)
                                 print("DB Transfer successfull.")
-                                self.displayAlertWithOkBtn(title: "Daten wurden gespeichert", message: "Die Daten wurden erfolgreich in die DB gespeichert.")
+                                //self.displayAlertWithOkBtn(title: "Daten wurden gespeichert", message: "Die Daten wurden erfolgreich in die DB gespeichert.")
+                                self.getDataFS(name: name)
                             }
                     })
                 }
             }
         }
+        self.getDataFS(name: name)
     }
     
     
     // FUNCTION THAT IS CALLED TO SET TIMESTAMP
     func getDataFromDB(name: String){
-        db.collection(dbCollection).document().getDocument { (docSnap, error) in
+        db.collection("\(dbCollection) (\(getShortDate()))").document(name).getDocument { (document, error) in
             
-            if let docSnap = docSnap, docSnap.exists {
-                let myData = docSnap.data()
-                let name = myData!["name"] as? String ?? ""
-                print("Name = \(name)")
-            }
-            if let error = error {
-                print(error.localizedDescription)
-                self.displayAlertWithOkBtn(title: "Fehler", message: "\(error.localizedDescription)")
+            if let document = document, document.exists {
+                let dataDescription = document.data().map(String.init(describing:)) ?? "nil"
+//                print("Document data: \(dataDescription)")
+                print("\(document.documentID) => \(document.data())")
             } else {
-                print("getDatafromDB without errors...")
+                print("Document does not exist")
             }
-            
         }
-
+    }
+    
+    func getDataFS(name: String){
+        //let ref = db.collection("\(dbCollection) (\(getShortDate()))").whereField("hasRecords", isEqualTo: true)
+        let ref = db.collection("\(dbCollection) (\(getShortDate()))").document(name)
+        ref.getDocument { (docSnapshot, error) in
+            guard let docSnapshot = docSnapshot, docSnapshot.exists else { return }
+            let myData = docSnapshot.data()
+            let itemName = myData!["name"] as? String ?? ""
+            let itemTime = myData!["recordedTime"] as? String ?? ""
+            let itemCreationDate = myData!["createdAt"] as? String ?? ""
+            //print("Name: \(itemName) \nRecorded time: \(itemTime) \nCreated at: \(itemCreationDate) ")
+            let msg = "'\(itemName)' erfolgreich in DB geschrieben.\nAufgezeichnete Zeit: \(itemTime) \nAngelegt am: \(itemCreationDate)"
+            self.displayAlertWithOkBtn(title: "Daten wurden gespeichert", message: msg)
+        }
     }
     
   

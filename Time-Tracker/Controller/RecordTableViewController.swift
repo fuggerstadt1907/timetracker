@@ -49,7 +49,8 @@ class RecordTableViewController: UITableViewController {
         for indexPath in indexPathsArray! {
             let cell = tableView.cellForRow(at: indexPath) as! RecordTableViewCell
             cell.saveAfterCheckToDB(name: cell.categoryLabel.text!, recordedTime: cell.categoryTimeLabel.text!)
-            cell.getDataFromDB(name: cell.categoryLabel.text!)
+            //cell.getDataFromDB(name: cell.categoryLabel.text!)
+            //cell.getDataFS(name: cell.categoryLabel.text!)
         }
     }
     
