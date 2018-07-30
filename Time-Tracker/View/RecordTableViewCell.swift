@@ -21,9 +21,11 @@ class RecordTableViewCell: UITableViewCell {
     let settings = FirestoreSettings()
     let dbCollection = "Items"
     
+    
     override func awakeFromNib() {
         settings.areTimestampsInSnapshotsEnabled = true
         db.settings = settings
+        
     }
 
     
@@ -86,23 +88,22 @@ class RecordTableViewCell: UITableViewCell {
     
     // FUNCTION THAT IS CALLED TO SET TIMESTAMP
     func getDataFromDB(name: String){
-        
-//        let timestamp: Timestamp = documentSnapshot.get("created_at") as! Timestamp
-//        let date: Date = timestamp.dateValue()
-        
-        // Create a reference to the cities collection
-        let itemRef = db.collection(dbCollection)
-        
-        // Create a query against the collection.
-        let query = itemRef.whereField("createdAt", isEqualTo: getCurrentDate())
-        print("Query \(query)")
-    }
-    
-    private func getCurrentDate() -> String {
-        let dateFormatter = DateFormatter()
-        let date = Date()
-        dateFormatter.dateFormat = "dd.MM.yyyy"
-        return  dateFormatter.string(from: date)
+        db.collection(dbCollection).document().getDocument { (docSnap, error) in
+            
+            if let docSnap = docSnap, docSnap.exists {
+                let myData = docSnap.data()
+                let name = myData!["name"] as? String ?? ""
+                print("Name = \(name)")
+            }
+            if let error = error {
+                print(error.localizedDescription)
+                self.displayAlertWithOkBtn(title: "Fehler", message: "\(error.localizedDescription)")
+            } else {
+                print("getDatafromDB without errors...")
+            }
+            
+        }
+
     }
     
   
