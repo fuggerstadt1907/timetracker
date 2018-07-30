@@ -49,7 +49,16 @@ class RecordTableViewCell: UITableViewCell {
     
     
     // FUNCTION THAT IS CALLED TO PUSH DATA IN TO DB
-    func saveAfterCheckToDB(name: String, hasRecords: Bool, recordedTime: String){
+    func saveAfterCheckToDB(name: String, recordedTime: String){
+        
+        let hasRecords: Bool
+        
+        if recordedTime == "00:00:00"{
+            hasRecords = false
+        } else {
+            hasRecords = true
+        }
+        
         let docRef = db.collection("\(dbCollection) (\(getShortDate()))").document(name)
         docRef.getDocument { (document, error) in
             if let document = document {

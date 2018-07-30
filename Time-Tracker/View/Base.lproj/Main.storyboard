@@ -89,16 +89,16 @@
                             </connections>
                         </barButtonItem>
                         <rightBarButtonItems>
+                            <barButtonItem systemItem="save" id="HY6-6Q-pnu">
+                                <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <connections>
+                                    <action selector="moveToFirebaseDB:" destination="2g1-ED-gvs" id="MDU-4v-HBu"/>
+                                </connections>
+                            </barButtonItem>
                             <barButtonItem systemItem="add" id="DR9-jq-uEE">
                                 <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <connections>
                                     <action selector="addNewItem:" destination="2g1-ED-gvs" id="gm9-IP-V8G"/>
-                                </connections>
-                            </barButtonItem>
-                            <barButtonItem systemItem="fastForward" id="HY6-6Q-pnu">
-                                <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                <connections>
-                                    <action selector="moveToFirebaseDB:" destination="2g1-ED-gvs" id="MDU-4v-HBu"/>
                                 </connections>
                             </barButtonItem>
                         </rightBarButtonItems>

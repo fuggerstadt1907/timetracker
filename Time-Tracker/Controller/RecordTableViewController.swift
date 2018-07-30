@@ -48,7 +48,7 @@ class RecordTableViewController: UITableViewController {
         let indexPathsArray = tableView.indexPathsForVisibleRows
         for indexPath in indexPathsArray! {
             let cell = tableView.cellForRow(at: indexPath) as! RecordTableViewCell
-            cell.saveAfterCheckToDB(name: cell.categoryLabel.text!, hasRecords: true, recordedTime: cell.categoryTimeLabel.text!)
+            cell.saveAfterCheckToDB(name: cell.categoryLabel.text!, recordedTime: cell.categoryTimeLabel.text!)
         }
     }
     
