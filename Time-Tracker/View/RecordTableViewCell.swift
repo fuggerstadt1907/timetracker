@@ -20,7 +20,7 @@ class RecordTableViewCell: UITableViewCell {
     let db = Firestore.firestore()
     let settings = FirestoreSettings()
     let dbCollection = "Items"
-    
+    //var timestamp = Timestamp()
     
     override func awakeFromNib() {
         settings.areTimestampsInSnapshotsEnabled = true
@@ -78,41 +78,27 @@ class RecordTableViewCell: UITableViewCell {
                                 self.dismissLoadingIndicator(animated: true)
                                 print("DB Transfer successfull.")
                                 //self.displayAlertWithOkBtn(title: "Daten wurden gespeichert", message: "Die Daten wurden erfolgreich in die DB gespeichert.")
-                                self.getDataFS(name: name)
+                                self.showSavedDataFromDB(name: name)
                             }
                     })
                 }
             }
         }
-        self.getDataFS(name: name)
+        // Call after datas successfully saved into DB
+        self.showSavedDataFromDB(name: name)
     }
     
     
-    // FUNCTION THAT IS CALLED TO SET TIMESTAMP
-    func getDataFromDB(name: String){
-        db.collection("\(dbCollection) (\(getShortDate()))").document(name).getDocument { (document, error) in
-            
-            if let document = document, document.exists {
-                let dataDescription = document.data().map(String.init(describing:)) ?? "nil"
-//                print("Document data: \(dataDescription)")
-                print("\(document.documentID) => \(document.data())")
-            } else {
-                print("Document does not exist")
-            }
-        }
-    }
-    
-    func getDataFS(name: String){
-        //let ref = db.collection("\(dbCollection) (\(getShortDate()))").whereField("hasRecords", isEqualTo: true)
+    // FUNCTION THAT IS CALLED TO GET A SINGLE ITEM FROM DB
+    func showSavedDataFromDB(name: String){
         let ref = db.collection("\(dbCollection) (\(getShortDate()))").document(name)
         ref.getDocument { (docSnapshot, error) in
             guard let docSnapshot = docSnapshot, docSnapshot.exists else { return }
-            let myData = docSnapshot.data()
-            let itemName = myData!["name"] as? String ?? ""
-            let itemTime = myData!["recordedTime"] as? String ?? ""
-            let itemCreationDate = myData!["createdAt"] as? String ?? ""
-            //print("Name: \(itemName) \nRecorded time: \(itemTime) \nCreated at: \(itemCreationDate) ")
-            let msg = "'\(itemName)' erfolgreich in DB geschrieben.\nAufgezeichnete Zeit: \(itemTime) \nAngelegt am: \(itemCreationDate)"
+            let timestamp: Timestamp = docSnapshot.get("createdAt") as! Timestamp
+            let name: String = docSnapshot.get("name") as! String
+            let time: String = docSnapshot.get("recordedTime") as! String
+            let date: Date = timestamp.dateValue()
+            let msg = "Daten erfolgreich in DB geschrieben.\nName: \(name)\nAufgezeichnete Zeit: \(time)\nAngelegt am \(self.formatTimestampGetDate(date: date)) \nAngelegt um \(self.formatTimestampGetTime(date: date)) Uhr"
             self.displayAlertWithOkBtn(title: "Daten wurden gespeichert", message: msg)
         }
     }
@@ -195,6 +181,22 @@ class RecordTableViewCell: UITableViewCell {
         loadingIndicator.stopAnimating()
         
         UIApplication.shared.keyWindow?.rootViewController?.dismiss(animated: animated, completion: nil)
+    }
+    
+    
+    // FUNCTION THAT IS CALLED TO FORMAT TIMESTAMP VALUE
+    private func formatTimestampGetDate(date: Date) -> String {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "dd.MM.yyyy"
+        return  dateFormatter.string(from: date)
+    }
+    
+    
+    // FUNCTION THAT IS CALLED TO FORMAT TIMESTAMP VALUE
+    private func formatTimestampGetTime(date: Date) -> String {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "HH:mm:ss"
+        return  dateFormatter.string(from: date)
     }
     
 }
