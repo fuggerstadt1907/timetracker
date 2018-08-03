@@ -125,7 +125,8 @@ class RecordTableViewController: UITableViewController {
     private func getCurrentDate() -> String {
         let dateFormatter = DateFormatter()
         let date = Date()
-        dateFormatter.dateFormat = "EEEE, dd.MM.yyyy"
+        //dateFormatter.dateFormat = "EEEE, dd.MM.yyyy"
+        dateFormatter.dateFormat = "EEE, dd.MM.yy"
         return  dateFormatter.string(from: date)
     }
         
