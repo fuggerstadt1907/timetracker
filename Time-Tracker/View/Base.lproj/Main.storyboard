@@ -113,14 +113,14 @@
             <objects>
                 <viewController id="R4Y-Xs-vHr" customClass="DashboardViewController" customModule="Time_Tracker" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="4Wa-hy-xYK">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="589"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="727"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="xNZ-6P-4Yh">
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="70"/>
                                 <color key="backgroundColor" red="0.53333333329999999" green="0.92156862750000001" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" constant="375" id="Tb9-iE-JS7"/>
+                                    <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="375" id="Tb9-iE-JS7"/>
                                     <constraint firstAttribute="height" constant="70" id="jrA-s5-5GH"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" name=".SFNSDisplay" family=".SF NS Display" pointSize="22"/>
@@ -145,28 +145,38 @@
                                     <action selector="datePickerHandler:" destination="R4Y-Xs-vHr" eventType="valueChanged" id="HRo-T7-97W"/>
                                 </connections>
                             </datePicker>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="CNL-OS-Np5" customClass="PieChartView" customModule="Charts">
+                                <rect key="frame" x="0.0" y="280" width="376" height="376"/>
+                                <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            </view>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
                             <constraint firstItem="xNZ-6P-4Yh" firstAttribute="top" secondItem="QS8-9w-xtc" secondAttribute="top" id="55h-Wt-J6s"/>
                             <constraint firstItem="xy0-dD-DJz" firstAttribute="trailing" secondItem="QS8-9w-xtc" secondAttribute="trailing" id="B5i-lw-vLQ"/>
                             <constraint firstItem="xy0-dD-DJz" firstAttribute="top" secondItem="xNZ-6P-4Yh" secondAttribute="bottom" id="Nw2-jM-KKx"/>
+                            <constraint firstItem="CNL-OS-Np5" firstAttribute="leading" secondItem="xy0-dD-DJz" secondAttribute="leading" id="UgK-NA-cHv"/>
+                            <constraint firstItem="CNL-OS-Np5" firstAttribute="centerX" secondItem="xy0-dD-DJz" secondAttribute="centerX" id="WdP-AA-B34"/>
                             <constraint firstItem="xNZ-6P-4Yh" firstAttribute="trailing" secondItem="QS8-9w-xtc" secondAttribute="trailing" id="XAv-y5-R5Y"/>
                             <constraint firstItem="xy0-dD-DJz" firstAttribute="top" secondItem="xNZ-6P-4Yh" secondAttribute="bottom" id="Z3F-iT-9Dg"/>
+                            <constraint firstItem="CNL-OS-Np5" firstAttribute="top" secondItem="xy0-dD-DJz" secondAttribute="bottom" constant="10" id="chi-Uj-jRv"/>
                             <constraint firstItem="xy0-dD-DJz" firstAttribute="leading" secondItem="QS8-9w-xtc" secondAttribute="leading" id="siF-Wx-P6Y"/>
                             <constraint firstItem="xNZ-6P-4Yh" firstAttribute="leading" secondItem="QS8-9w-xtc" secondAttribute="leading" id="u3q-t4-XFR"/>
+                            <constraint firstAttribute="bottom" secondItem="CNL-OS-Np5" secondAttribute="bottom" constant="71" id="wmq-q5-jg6"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="QS8-9w-xtc"/>
                     </view>
                     <navigationItem key="navigationItem" title="Dashboard" id="2ql-l2-rVj"/>
+                    <size key="freeformSize" width="375" height="950"/>
                     <connections>
                         <outlet property="datePicker" destination="xy0-dD-DJz" id="dKQ-aT-xkI"/>
+                        <outlet property="pieChart" destination="CNL-OS-Np5" id="0QC-MT-K8z"/>
                         <outlet property="selectDateBtn" destination="xNZ-6P-4Yh" id="uKP-OK-uof"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="e2S-LE-QRs" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1693.5999999999999" y="450.73891625615767"/>
+            <point key="canvasLocation" x="1693.5999999999999" y="520.93596059113304"/>
         </scene>
         <!--Übersicht-->
         <scene sceneID="5Zk-ZN-lIa">
@@ -199,7 +209,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Dan-ed-Eqy" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1693.5999999999999" y="1127.5862068965519"/>
+            <point key="canvasLocation" x="1694" y="1259"/>
         </scene>
         <!--Erfassen-->
         <scene sceneID="Ugt-Ul-H4G">
@@ -298,7 +308,7 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="exx-VA-hde" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="974" y="1128"/>
+            <point key="canvasLocation" x="974" y="1258"/>
         </scene>
     </scenes>
     <resources>

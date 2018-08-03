@@ -7,18 +7,50 @@
 //
 
 import UIKit
+//import FirebaseFirestore
+import Charts
 
 class DashboardViewController: UIViewController {
     
+    
+    // CUSTOM VARIABLES
+    var firstChartData = PieChartDataEntry(value: 55)
+    var secondChartData = PieChartDataEntry(value: 11)
+    var numberOfDataEntries = [PieChartDataEntry]()
+    var firstNumber = 44 as AnyObject
+    var secondNumber = 10 as AnyObject
+    
+    // FIREBASE VARIABLES
+//    let db = Firestore.firestore()
+//    let settings = FirestoreSettings()
+//    let dbCollection = "Items"
+    
+    
+    // Dasboard View Outlets
     @IBOutlet weak var selectDateBtn: UIButton!
     @IBOutlet weak var datePicker: UIDatePicker!
+    @IBOutlet weak var pieChart: PieChartView!
     
-
+    // DUMMY STEPPER
+    @IBOutlet weak var firstStepper: UIStepper!
+    @IBOutlet weak var secondStepper: UIStepper!
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         selectDateBtn.setTitle(formatDatePickerValue(), for: .normal)
         datePicker.maximumDate = Date()
+        
+        // Chart Data
+        self.pieChart.chartDescription?.text = ""
+        firstChartData.data = self.firstNumber
+        firstChartData.label = "first Data"
+        secondChartData.data = self.secondNumber
+        secondChartData.label = "second Data"
+        numberOfDataEntries = [firstChartData, secondChartData]
+        updateChartData()
+        
         self.tabBarItem = UITabBarItem(title: "Dashboard", image: #imageLiteral(resourceName: "DashboardIcon"), tag: 1)
     }
 
@@ -34,6 +66,18 @@ class DashboardViewController: UIViewController {
     // FUNCTION THAT IS CALLED AFTER DATE PICKER CHANGED
     @IBAction func datePickerHandler(_ sender: Any) {
         self.selectDateBtn.setTitle(formatDatePickerValue(), for: .normal)
+    }
+    
+    
+    // FUNCTION THAT IS CALLED TO UPDATE THE PIE CHART
+    func updateChartData(){
+        let chartDataSet = PieChartDataSet(values: numberOfDataEntries, label: nil)
+        let chartData = PieChartData(dataSet: chartDataSet)
+        
+        let colors = [CategoryColors.Green, CategoryColors.Purple]
+        chartDataSet.colors = colors
+        
+        pieChart.data = chartData
     }
 
     

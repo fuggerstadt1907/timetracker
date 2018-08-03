@@ -11,5 +11,6 @@ pod 'Firebase/Core'
 pod 'Firebase/Firestore'
 pod 'Fabric', '~> 1.7.9'
 pod 'Crashlytics', '~> 3.10.5'
+pod 'Charts'
 
 end
