@@ -20,20 +20,11 @@ class DashboardViewController: UIViewController {
     var firstNumber = 44 as AnyObject
     var secondNumber = 10 as AnyObject
     
-    // FIREBASE VARIABLES
-//    let db = Firestore.firestore()
-//    let settings = FirestoreSettings()
-//    let dbCollection = "Items"
-    
     
     // Dasboard View Outlets
     @IBOutlet weak var selectDateBtn: UIButton!
     @IBOutlet weak var datePicker: UIDatePicker!
     @IBOutlet weak var pieChart: PieChartView!
-    
-    // DUMMY STEPPER
-    @IBOutlet weak var firstStepper: UIStepper!
-    @IBOutlet weak var secondStepper: UIStepper!
     
     
     override func viewDidLoad() {
@@ -54,6 +45,7 @@ class DashboardViewController: UIViewController {
         self.tabBarItem = UITabBarItem(title: "Dashboard", image: #imageLiteral(resourceName: "DashboardIcon"), tag: 1)
     }
 
+    
     // FUNCTION THAT IS CALLED WHEN DATE BUTTON HAS BEEN PRESSED
     @IBAction func selectDateHandler(_ sender: UIButton) {
         UIView.animate(withDuration: 0.3, animations: {

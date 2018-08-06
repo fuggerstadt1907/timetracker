@@ -16,18 +16,13 @@ class RecordTableViewCell: UITableViewCell {
     var isRecording = false
     var time = 0
     
+    
     // FIREBASE VARIABLES
     let db = Firestore.firestore()
     let settings = FirestoreSettings()
     let dbCollection = "Items"
     //var timestamp = Timestamp()
     
-    override func awakeFromNib() {
-        settings.areTimestampsInSnapshotsEnabled = true
-        db.settings = settings
-        
-    }
-
     
     // TABLEVIEW CELL OUTLETS
     @IBOutlet weak var categoryLabel: UILabel!
@@ -37,32 +32,63 @@ class RecordTableViewCell: UITableViewCell {
         buttonPressed()
     }
     
-    private func getShortDate() -> String {
-        let dateFormatter = DateFormatter()
-        let date = Date()
-        dateFormatter.dateFormat = "dd.MM.yyyy"
-        return  dateFormatter.string(from: date)
+//    private func getShortDate() -> String {
+//        let dateFormatter = DateFormatter()
+//        let date = Date()
+//        dateFormatter.dateFormat = "dd.MM.yyyy"
+//        return  dateFormatter.string(from: date)
+//    }
+    
+    
+    override func awakeFromNib() {
+        settings.areTimestampsInSnapshotsEnabled = true
+        db.settings = settings
     }
     
     
     // FUNCTION THAT IS CALLED TO PUSH DATA IN TO DB
     func saveAfterCheckToDB(name: String, recordedTime: String){
-        self.displayLoadingIndicator(displayedMessage: "Bitte warten ...")
-        
+        let docRef = db.collection("\(dbCollection) (\(Utilities.formatDate()))").document(name)
+        // Displaying Loading-Indicator
+        Utilities.displayLoadingIndicator(displayedMessage: "Bitte warten ...")
+        // Check if Item has a recorded time
         let hasRecords: Bool
         if recordedTime == "00:00:00"{
             hasRecords = false
+            print("hasRecords is false")
         } else {
             hasRecords = true
         }
-        
-        let docRef = db.collection("\(dbCollection) (\(getShortDate()))").document(name)
         docRef.getDocument { (document, error) in
             if let document = document {
                 if document.exists {
-                    self.dismissLoadingIndicator(animated: true)
-                    print("Document data already exists!")
-                    self.displayAlertWithOkBtn(title: "Fehler beim Speichern", message: "Es existiert bereits ein Datensatz für \n''\(docRef.documentID)'' \nin der Datenbank!")
+                    // Handle case, that the document already exists in DB
+                    let time: String = document.get("recordedTime") as! String
+                    // Check if recorded time changed
+                    if time != recordedTime {
+                        docRef.setData([
+                            "name": name,
+                            "hasRecords": hasRecords,
+                            "recordedTime": recordedTime,
+                            "createdAt": FieldValue.serverTimestamp()
+                            ], completion: { (error: Error?) in
+                                if let error = error {
+                                    Utilities.dismissLoadingIndicator(animated: true)
+                                    print("Error while saving into DB... \(error.localizedDescription)")
+                                }
+                                else {
+                                    Utilities.dismissLoadingIndicator(animated: true)
+                                    print("DB Transfer successfull.")
+                                    self.showInsertedDataFromDB(name: name, isItAnUpdate: true)
+                                }
+                        })
+                    } else {
+                        Utilities.dismissAlert()
+                        Utilities.dismissLoadingIndicator(animated: true)
+                        print("Document data already exists!")
+                        Utilities.displayAlertWithOkBtn(title: "Fehler beim Speichern", message: "Es existiert bereits ein Datensatz für \n''\(docRef.documentID)'' \nin der Datenbank!")
+                    }
+                    
                 } else {
                     docRef.setData([
                         "name": name,
@@ -71,35 +97,76 @@ class RecordTableViewCell: UITableViewCell {
                         "createdAt": FieldValue.serverTimestamp()
                         ], completion: { (error: Error?) in
                             if let error = error {
-                                self.dismissLoadingIndicator(animated: true)
+                                Utilities.dismissLoadingIndicator(animated: true)
                                 print("Error while saving into DB... \(error.localizedDescription)")
                             }
                             else {
-                                self.dismissLoadingIndicator(animated: true)
+                                Utilities.dismissLoadingIndicator(animated: true)
                                 print("DB Transfer successfull.")
-                                //self.displayAlertWithOkBtn(title: "Daten wurden gespeichert", message: "Die Daten wurden erfolgreich in die DB gespeichert.")
-                                self.showSavedDataFromDB(name: name)
+                                
+                                self.showInsertedDataFromDB(name: name, isItAnUpdate: false)
                             }
                     })
                 }
             }
         }
         // Call after datas successfully saved into DB
-        self.showSavedDataFromDB(name: name)
+        self.showInsertedDataFromDB(name: name, isItAnUpdate: false)
+        
+    }
+    
+    
+    // FUNCTION THAT IS CALLED TO GET A SINGLE ITEM FROM DB
+    func showInsertedDataFromDB(name: String, isItAnUpdate: Bool){
+        let ref = db.collection("\(dbCollection) (\(Utilities.formatDate()))").document(name)
+        ref.getDocument { (docSnapshot, error) in
+            guard let docSnapshot = docSnapshot, docSnapshot.exists else { return }
+            let timestamp: Timestamp = (docSnapshot.get("createdAt") as? Timestamp)!
+            let name: String = docSnapshot.get("name") as! String
+            let time: String = docSnapshot.get("recordedTime") as! String
+            let date: Date = timestamp.dateValue()
+            let msg: String
+            
+            if isItAnUpdate {
+                msg = "Daten erfolgreich in DB aktualisiert.\nName: \(name)\nAufgezeichnete Zeit: \(time)\nAngelegt am \(Utilities.formatTimestampGetDate(date: date)) \nAngelegt um \(Utilities.formatTimestampGetTime(date: date)) Uhr"
+                Utilities.displayAlertWithOkBtn(title: "Daten wurden aktualisiert", message: msg)
+            } else {
+                msg = "Daten erfolgreich in DB geschrieben.\nName: \(name)\nAufgezeichnete Zeit: \(time)\nAngelegt am \(Utilities.formatTimestampGetDate(date: date)) \nAngelegt um \(Utilities.formatTimestampGetTime(date: date)) Uhr"
+                Utilities.displayAlertWithOkBtn(title: "Daten wurden gespeichert", message: msg)
+            }
+            
+            
+        }
     }
     
     
     // FUNCTION THAT IS CALLED TO GET A SINGLE ITEM FROM DB
     func showSavedDataFromDB(name: String){
-        let ref = db.collection("\(dbCollection) (\(getShortDate()))").document(name)
+        let ref = db.collection("\(dbCollection) (\(Utilities.formatDate()))").document(name)
         ref.getDocument { (docSnapshot, error) in
             guard let docSnapshot = docSnapshot, docSnapshot.exists else { return }
-            let timestamp: Timestamp = docSnapshot.get("createdAt") as! Timestamp
+            let timestamp: Timestamp = (docSnapshot.get("createdAt") as? Timestamp)!
             let name: String = docSnapshot.get("name") as! String
             let time: String = docSnapshot.get("recordedTime") as! String
             let date: Date = timestamp.dateValue()
-            let msg = "Daten erfolgreich in DB geschrieben.\nName: \(name)\nAufgezeichnete Zeit: \(time)\nAngelegt am \(self.formatTimestampGetDate(date: date)) \nAngelegt um \(self.formatTimestampGetTime(date: date)) Uhr"
-            self.displayAlertWithOkBtn(title: "Daten wurden gespeichert", message: msg)
+            let msg: String
+            msg = "Daten erfolgreich in DB geschrieben.\nName: \(name)\nAufgezeichnete Zeit: \(time)\nAngelegt am \(Utilities.formatTimestampGetDate(date: date)) \nAngelegt um \(Utilities.formatTimestampGetTime(date: date)) Uhr"
+            Utilities.displayAlertWithOkBtn(title: "Daten wurden gespeichert", message: msg)
+        }
+    }
+    
+    
+    // FUNCTION THAT IS CALLED TO GET A SINGLE ITEM FROM DB
+    func showUpdatedDataFromDB(name: String){
+        let ref = db.collection("\(dbCollection) (\(Utilities.formatDate()))").document(name)
+        ref.getDocument { (docSnapshot, error) in
+            guard let docSnapshot = docSnapshot, docSnapshot.exists else { return }
+            let timestamp: Timestamp = (docSnapshot.get("createdAt") as? Timestamp)!
+            let name: String = docSnapshot.get("name") as! String
+            let time: String = docSnapshot.get("recordedTime") as! String
+            let date: Date = timestamp.dateValue()
+            let msg = "Daten erfolgreich in DB aktualisiert.\nName: \(name)\nAufgezeichnete Zeit: \(time)\nAngelegt am \(Utilities.formatTimestampGetDate(date: date)) \nAngelegt um \(Utilities.formatTimestampGetTime(date: date)) Uhr"
+            Utilities.displayAlertWithOkBtn(title: "Daten aktualisiert", message: msg)
         }
     }
     
@@ -120,7 +187,6 @@ class RecordTableViewCell: UITableViewCell {
     // FUNCTION THAT IS CALLED, TO FIRE THE TIMER IN TABLEVIEW CELL
     func startTimer(){
         timer = Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: #selector(updateTimeLabel), userInfo: nil, repeats: true)
-        
     }
     
     
@@ -130,7 +196,6 @@ class RecordTableViewCell: UITableViewCell {
         self.categoryTimeLabel.text = "\(timeFormatted(time))"
         categoryActionButton.setImage(#imageLiteral(resourceName: "pauseIcon"), for: .normal)
         self.backgroundColor = CategoryColors.NavbarBlue
-
     }
     
     
@@ -148,55 +213,6 @@ class RecordTableViewCell: UITableViewCell {
         let minutes: Int = (totalSeconds / 60) % 60
         let hours: Int = (totalSeconds / 3600)
         return String(format: "%02d:%02d:%02d", hours, minutes, seconds)
-    }
-    
-    
-    // FUNCTION THAT IS CALLED TO BUID AN ALERT WITH OK BUTTON
-    private func displayAlertWithOkBtn(title: String, message: String){
-        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
-        let alertAction = UIAlertAction(title: "Okay", style: .default, handler: { _ in })
-        alert.addAction(alertAction)
-        UIApplication.shared.keyWindow?.rootViewController?.present(alert, animated: true, completion: nil)
-        //self.present(alert, animated: true, completion: nil)
-    }
-    
-    
-    // FUNCTION THAT IS CALLED TO SHOW LOADING INDICATOR
-    private func displayLoadingIndicator(displayedMessage: String){
-        let alert = UIAlertController(title: nil, message: displayedMessage, preferredStyle: .alert)
-        
-        let loadingIndicator = UIActivityIndicatorView(frame: CGRect(x: 10, y: 5, width: 50, height: 50))
-        loadingIndicator.hidesWhenStopped = true
-        loadingIndicator.activityIndicatorViewStyle = UIActivityIndicatorViewStyle.gray
-        loadingIndicator.startAnimating();
-        
-        alert.view.addSubview(loadingIndicator)
-        UIApplication.shared.keyWindow?.rootViewController?.present(alert, animated: true, completion: nil)
-    }
-    
-    
-    // FUNCTION THAT IS CALLED TO DISMISS A LOADING INDICATOR
-    private func dismissLoadingIndicator(animated: Bool){
-        let loadingIndicator = UIActivityIndicatorView(frame: CGRect(x: 10, y: 5, width: 50, height: 50))
-        loadingIndicator.stopAnimating()
-        
-        UIApplication.shared.keyWindow?.rootViewController?.dismiss(animated: animated, completion: nil)
-    }
-    
-    
-    // FUNCTION THAT IS CALLED TO FORMAT TIMESTAMP VALUE
-    private func formatTimestampGetDate(date: Date) -> String {
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "dd.MM.yyyy"
-        return  dateFormatter.string(from: date)
-    }
-    
-    
-    // FUNCTION THAT IS CALLED TO FORMAT TIMESTAMP VALUE
-    private func formatTimestampGetTime(date: Date) -> String {
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "HH:mm:ss"
-        return  dateFormatter.string(from: date)
     }
     
 }

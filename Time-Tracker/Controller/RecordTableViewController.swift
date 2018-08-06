@@ -49,8 +49,6 @@ class RecordTableViewController: UITableViewController {
         for indexPath in indexPathsArray! {
             let cell = tableView.cellForRow(at: indexPath) as! RecordTableViewCell
             cell.saveAfterCheckToDB(name: cell.categoryLabel.text!, recordedTime: cell.categoryTimeLabel.text!)
-            //cell.getDataFromDB(name: cell.categoryLabel.text!)
-            //cell.getDataFS(name: cell.categoryLabel.text!)
         }
     }
     
@@ -60,7 +58,7 @@ class RecordTableViewController: UITableViewController {
         super.viewDidLoad()
         tempCategoryItems = [CategoryItem(categoryName: "Testprojekt", recordedTime: nil)]
         
-        self.title = getCurrentDate()
+        self.title = Utilities.getCurrentDate()
         self.tableView.delaysContentTouches = false
         self.tabBarItem = UITabBarItem(title: "Erfassen", image: #imageLiteral(resourceName: "RecentIcon"), tag: 0)
     }
@@ -87,7 +85,7 @@ class RecordTableViewController: UITableViewController {
                 self.tempCategoryItems.append(CategoryItem(categoryName: firstTextField!, recordedTime: nil))
                 self.tableView.reloadData()
             } else {
-                self.displayAlertWithOkBtn(title: "Fehler beim Speichern", message: "Bitte gib einen Namen an.")
+                Utilities.displayAlertWithOkBtn(title: "Fehler beim Speichern", message: "Bitte gib einen Namen an.")
                 return
             }
         })
@@ -97,16 +95,7 @@ class RecordTableViewController: UITableViewController {
         alertController.addAction(saveAction)
         self.present(alertController, animated: true, completion: nil)
     }
-    
-    
-    // FUNCTION THAT IS CALLED TO BUID AN ALERT WITH OK BUTTON
-    private func displayAlertWithOkBtn(title: String, message: String){
-        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
-        let alertAction = UIAlertAction(title: "Okay", style: .default, handler: { _ in })
-        alert.addAction(alertAction)
-        self.present(alert, animated: true, completion: nil)
-    }
-    
+        
     
     // FUNCTION THAT IS CALLED TO BUILD AN ALERT WITH TWO BUTTONS
     private func displayAlertWithTwoBtns(title: String, message: String, actionBtnText: String, cancelBtnText: String){
@@ -120,16 +109,6 @@ class RecordTableViewController: UITableViewController {
         self.present(alert, animated: true, completion: nil)
     }
     
-    
-    // FUNCTION THAT IS CALLED TO GET THE CURRENT DAY AND DATE
-    private func getCurrentDate() -> String {
-        let dateFormatter = DateFormatter()
-        let date = Date()
-        //dateFormatter.dateFormat = "EEEE, dd.MM.yyyy"
-        dateFormatter.dateFormat = "EEE, dd.MM.yy"
-        return  dateFormatter.string(from: date)
-    }
-        
     
     // FUNCTION THAT IS CALLED TO SET THE NUMBER OF SECTIONS IN THE TABLEVIEW
     override func numberOfSections(in tableView: UITableView) -> Int {
@@ -172,7 +151,6 @@ class RecordTableViewController: UITableViewController {
         // EDIT ACTION
         let FlagAction = UIContextualAction(style: .normal, title:  "Bearbeiten", handler: { (ac:UIContextualAction, view:UIView, success:(Bool) -> Void) in
             print("Editing \(self.tempCategoryItems[indexPath.row].categoryName)")
-            //self.showInputToEdit(index: indexPath)
             self.showInputToEdit(index: indexPath)
             success(true)
         })
@@ -195,7 +173,7 @@ class RecordTableViewController: UITableViewController {
             }
             else {
                 print("Name ist leer")
-                self.showInputWhenNameWasEmpty()
+                
             }
         }
         
@@ -220,33 +198,6 @@ class RecordTableViewController: UITableViewController {
         tableView.reloadData()
     }
     
-    // FUNCTION THAT IS CALLED TO SHOW AN ERROR ALERT WHEN INPUT WAS EMPTY
-    func showInputWhenNameWasEmpty() {
-        let alertController = UIAlertController(title: "Neue Aufgabe", message: "Der Name der Aufgabe darf nicht leer sein!", preferredStyle: .alert)
-        let confirmAction = UIAlertAction(title: "Hinzufügen", style: .default) { (_) in
-            
-            //getting the input values from user
-            if alertController.textFields?[0].text != "" {
-                self.showInputDialog()
-            }
-            else {
-                print("Name ist leer")
-                self.showInputWhenNameWasEmpty()
-            }
-        }
-        
-        let cancelAction = UIAlertAction(title: "Abbrechen", style: .cancel) { (_) in }
-        
-        // adding textfields to our dialog box
-        alertController.addTextField { (textField) in
-            textField.placeholder = "Name..."
-        }
-        
-        alertController.addAction(confirmAction)
-        alertController.addAction(cancelAction)
-        
-        self.present(alertController, animated: true, completion: nil)
-    }
  
 }
 

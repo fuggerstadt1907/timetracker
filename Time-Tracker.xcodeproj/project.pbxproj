@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		D20D9A522118C6FB003CB263 /* Utilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = D20D9A512118C6FB003CB263 /* Utilities.swift */; };
 		D2151423210BA16E004CC038 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D2151422210BA16D004CC038 /* Assets.xcassets */; };
 		D2151425210BB389004CC038 /* OverviewViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2151424210BB389004CC038 /* OverviewViewController.swift */; };
 		D226600A2107BA0F004EAFA3 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D22660092107BA0F004EAFA3 /* AppDelegate.swift */; };
@@ -25,6 +26,7 @@
 		1F92B457BAEDC75DC36FBE93 /* Pods-Time-Tracker.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Time-Tracker.release.xcconfig"; path = "Pods/Target Support Files/Pods-Time-Tracker/Pods-Time-Tracker.release.xcconfig"; sourceTree = "<group>"; };
 		36655CA83A0570E66E77B377 /* Pods_Time_Tracker.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Time_Tracker.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		6007A207FF90416CCB0D5FF5 /* Pods-Time-Tracker.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Time-Tracker.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Time-Tracker/Pods-Time-Tracker.debug.xcconfig"; sourceTree = "<group>"; };
+		D20D9A512118C6FB003CB263 /* Utilities.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utilities.swift; sourceTree = "<group>"; };
 		D2151422210BA16D004CC038 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		D2151424210BB389004CC038 /* OverviewViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OverviewViewController.swift; sourceTree = "<group>"; };
 		D22660062107BA0F004EAFA3 /* Time-Tracker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Time-Tracker.app"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -69,6 +71,14 @@
 			name = Pods;
 			sourceTree = "<group>";
 		};
+		D20D9A502118C6D0003CB263 /* Helper */ = {
+			isa = PBXGroup;
+			children = (
+				D20D9A512118C6FB003CB263 /* Utilities.swift */,
+			);
+			path = Helper;
+			sourceTree = "<group>";
+		};
 		D2265FFD2107BA0F004EAFA3 = {
 			isa = PBXGroup;
 			children = (
@@ -90,6 +100,7 @@
 		D22660082107BA0F004EAFA3 /* Time-Tracker */ = {
 			isa = PBXGroup;
 			children = (
+				D20D9A502118C6D0003CB263 /* Helper */,
 				D29C960121087B7B00663E1F /* Model */,
 				D29C95FF2108766100663E1F /* View */,
 				D29C960421088C2D00663E1F /* Controller */,
@@ -267,6 +278,7 @@
 				D226600A2107BA0F004EAFA3 /* AppDelegate.swift in Sources */,
 				D2151425210BB389004CC038 /* OverviewViewController.swift in Sources */,
 				D29C960321087B9D00663E1F /* CategoryItem.swift in Sources */,
+				D20D9A522118C6FB003CB263 /* Utilities.swift in Sources */,
 				D29636512109D57300558A3C /* RecordTableViewCell.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
