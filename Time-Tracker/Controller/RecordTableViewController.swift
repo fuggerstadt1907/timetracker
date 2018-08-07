@@ -19,6 +19,9 @@ class RecordTableViewController: UITableViewController {
     var countdownTimer = [Timer]()
     var totalTime = 0
     
+    // FIREBASE VARIABLES
+    let db = Firestore.firestore()
+    let settings = FirestoreSettings()
     
     
     // TABLEVIEW CONTROLLER OUTLETS
@@ -53,9 +56,19 @@ class RecordTableViewController: UITableViewController {
     }
     
     
+    @IBAction func updateDataInDB(_ sender: UIBarButtonItem) {
+        let indexPathsArray = tableView.indexPathsForVisibleRows
+        for indexPath in indexPathsArray! {
+            let cell = tableView.cellForRow(at: indexPath) as! RecordTableViewCell
+            cell.updateDataInDB(name: cell.categoryLabel.text!, recordedTime: cell.categoryTimeLabel.text!)
+        }
+    }
+    
+    
     // VIEW DID LOAD
     override func viewDidLoad() {
         super.viewDidLoad()
+        checkForUpdates
         tempCategoryItems = [CategoryItem(categoryName: "Testprojekt", recordedTime: nil)]
         
         self.title = Utilities.getCurrentDate()
@@ -63,6 +76,26 @@ class RecordTableViewController: UITableViewController {
         self.tabBarItem = UITabBarItem(title: "Erfassen", image: #imageLiteral(resourceName: "RecentIcon"), tag: 0)
     }
     
+    
+    func checkForUpdates(){
+        db.collection(Utilities.getCurrentYear()).document(Utilities.getCurrenMonth()).collection(Utilities.getCurrentDay())
+            .addSnapshotListener {
+                querySnapshot, error in
+                
+                guard let snapshot = querySnapshot else {return}
+                snapshot.documentChanges.forEach {
+                    diff in
+                    
+                    if diff.type == .added {
+                        print(diff.document.data())
+                        DispatchQueue.main.async {
+                            self.tableView.reloadData()
+                        }
+                    }
+                }
+        }
+        
+    }
     
     
     // FUNCTION THAT IS CALLED TO ADD A NEW ITEM

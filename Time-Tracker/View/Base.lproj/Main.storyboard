@@ -89,7 +89,13 @@
                             </connections>
                         </barButtonItem>
                         <rightBarButtonItems>
-                            <barButtonItem systemItem="save" id="HY6-6Q-pnu">
+                            <barButtonItem title="Update" id="DDx-9P-6Fm">
+                                <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <connections>
+                                    <action selector="updateDataInDB:" destination="2g1-ED-gvs" id="01G-Ft-3NI"/>
+                                </connections>
+                            </barButtonItem>
+                            <barButtonItem title="Speichern" id="HY6-6Q-pnu">
                                 <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <connections>
                                     <action selector="moveToFirebaseDB:" destination="2g1-ED-gvs" id="MDU-4v-HBu"/>

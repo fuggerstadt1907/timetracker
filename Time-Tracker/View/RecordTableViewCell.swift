@@ -21,7 +21,6 @@ class RecordTableViewCell: UITableViewCell {
     let db = Firestore.firestore()
     let settings = FirestoreSettings()
     let dbCollection = "Items"
-    //var timestamp = Timestamp()
     
     
     // TABLEVIEW CELL OUTLETS
@@ -32,13 +31,6 @@ class RecordTableViewCell: UITableViewCell {
         buttonPressed()
     }
     
-//    private func getShortDate() -> String {
-//        let dateFormatter = DateFormatter()
-//        let date = Date()
-//        dateFormatter.dateFormat = "dd.MM.yyyy"
-//        return  dateFormatter.string(from: date)
-//    }
-    
     
     override func awakeFromNib() {
         settings.areTimestampsInSnapshotsEnabled = true
@@ -46,15 +38,10 @@ class RecordTableViewCell: UITableViewCell {
     }
     
     
-    // FUNCTION THAT IS CALLED TO PUSH DATA INTO DB
-    func saveAfterCheckToDB(name: String, recordedTime: String){
-        
-        // Creating Reference to DB data
-        //let docRef = db.collection("\(dbCollection) (\(Utilities.formatDate()))").document()
-        let docRef = db.collection(Utilities.getCurrentYear()).document(Utilities.getCurrenMonth()).collection(Utilities.getCurrentDay()).document(name)
-        
-        // Displaying Loading-Indicator
-        //Utilities.displayLoadingIndicator(displayedMessage: "Bitte warten ...")
+    // FUNCTION THAT IS CALLED TO UPDATE DATA IN DB
+    func updateDataInDB(name: String, recordedTime: String){
+        // Creating new write batch
+        let batch = db.batch()
         
         // Check if Item has a recorded time
         let hasRecords: Bool
@@ -65,64 +52,75 @@ class RecordTableViewCell: UITableViewCell {
             hasRecords = true
         }
         
-        // Accessing datas
+        // Creating Document Reference
+        let docRef = db.collection(Utilities.getCurrentYear()).document(Utilities.getCurrenMonth()).collection(Utilities.getCurrentDay()).document(name)
+        
+        // Accessing DB now
         docRef.getDocument { (document, error) in
             if let document = document {
                 if document.exists {
-                    
                     let timestamp: Timestamp = document.get("createdAt") as! Timestamp
-                    let alert = UIAlertController(title: "Daten aktualisieren", message: "Wollen Sie die Daten in der DB aktualisieren?", preferredStyle: .alert)
-                    let firstAction = UIAlertAction(title: "Aktualisieren", style: .default) { alert -> Void in
-                        self.db.collection("\(self.dbCollection) (\(Utilities.formatDate()))").document().setData([
+                    batch.updateData(
+                        [
                             "name": name,
                             "hasRecords": hasRecords,
                             "recordedTime": recordedTime,
                             "createdAt": timestamp,
                             "lastUpdate": FieldValue.serverTimestamp()
-                            ], completion: { (error: Error?) in
-                                if let error = error {
-                                    Utilities.dismissLoadingIndicator(animated: true)
-                                    print("Error while saving into DB... \(error.localizedDescription)")
-                                }
-                                else {
-                                    Utilities.dismissLoadingIndicator(animated: true)
-                                    print("DB Transfer successfull.")
-                                    self.showInsertedDataFromDB(name: name, isItAnUpdate: true)
-                                }
-                        })
-                    }
-                    let cancelAction = UIAlertAction(title: "Abbrechen", style: .default, handler: { (action : UIAlertAction!) -> Void in })
-                    alert.addAction(cancelAction)
-                    alert.addAction(firstAction)
-                    UIApplication.shared.keyWindow?.rootViewController?.self.present(alert, animated: true, completion: nil)
+                        ], forDocument: docRef)
                     
-                    // Call after datas successfully saved into DB
-                    self.showInsertedDataFromDB(name: name, isItAnUpdate: true)
-                    
-                } else {
-                    docRef.setData([
+                    batch.commit(completion: { (error) in
+                        if let error = error {
+                            print("Error while updating batch \(error)")
+                        } else {
+                            print("Batch successfully updated!")
+                        }
+                    })
+                }
+            }
+        }
+    }
+    
+    
+    // FUNCTION THAT IS CALLED TO WRITEINTO
+    func saveAfterCheckToDB(name: String, recordedTime: String) {
+        
+        // Creating new write batch
+        let batch = db.batch()
+        
+        // Check if Item has a recorded time
+        let hasRecords: Bool
+        if recordedTime == "00:00:00"{
+            hasRecords = false
+            print("hasRecords is false")
+        } else {
+            hasRecords = true
+        }
+        
+        // Creating Document Reference
+        let docRef = db.collection(Utilities.getCurrentYear()).document(Utilities.getCurrenMonth()).collection(Utilities.getCurrentDay()).document(name)
+        
+        // Accessing DB now
+        docRef.getDocument { (document, error) in
+
+                batch.setData(
+                    [
                         "name": name,
                         "hasRecords": hasRecords,
                         "recordedTime": recordedTime,
                         "createdAt": FieldValue.serverTimestamp(),
                         "lastUpdate": FieldValue.serverTimestamp()
-                        ], completion: { (error: Error?) in
-                            if let error = error {
-                                Utilities.dismissLoadingIndicator(animated: true)
-                                print("Error while saving into DB... \(error.localizedDescription)")
-                            }
-                            else {
-                                Utilities.dismissLoadingIndicator(animated: true)
-                                print("DB Transfer successfull.")
-                                self.showInsertedDataFromDB(name: name, isItAnUpdate: false)
-                            }
-                    })
-                }
-            }
+                    ], forDocument: docRef)
+                batch.commit(completion: { (error) in
+                        if let error = error {
+                            print("Error while writing batch \(error)")
+                        }
+                        else {
+                            print("Batch successfully written!")
+                        }
+                })
+            
         }
-        // Call after datas successfully saved into DB
-        self.showInsertedDataFromDB(name: name, isItAnUpdate: false)
-        
     }
     
     
@@ -146,8 +144,6 @@ class RecordTableViewCell: UITableViewCell {
                 msg = "Daten erfolgreich in DB geschrieben.\nName: \(name)\nAufgezeichnete Zeit: \(time)\nAngelegt am \(Utilities.formatTimestampGetDate(date: timestampDate)) \nAngelegt um \(Utilities.formatTimestampGetTime(date: timestampDate)) Uhr"
                 Utilities.displayAlertWithOkBtn(title: "Daten wurden gespeichert", message: msg)
             }
-            
-            
         }
     }
     
