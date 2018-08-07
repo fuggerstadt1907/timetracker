@@ -12,6 +12,33 @@ import UIKit
 enum Utilities {
     
     
+    // FUNCTION THAT IS CALLED TO GET THE CURRENT YEAR
+    static func getCurrentYear() -> String {
+        let dateFormatter = DateFormatter()
+        let date = Date()
+        dateFormatter.dateFormat = "yyyy"
+        return  dateFormatter.string(from: date)
+    }
+    
+    
+    // FUNCTION THAT IS CALLED TO GET THE CURRENT MONTH
+    static func getCurrenMonth() -> String {
+        let dateFormatter = DateFormatter()
+        let date = Date()
+        dateFormatter.dateFormat = "MMMM"
+        return  dateFormatter.string(from: date)
+    }
+    
+    
+    // FUNCTION THAT IS CALLED TO GET THE CURRENT DAY
+    static func getCurrentDay() -> String {
+        let dateFormatter = DateFormatter()
+        let date = Date()
+        dateFormatter.dateFormat = "dd.MM.yyyy"
+        return  dateFormatter.string(from: date)
+    }
+    
+    
     // FUNCTION THAT IS CALLED TO GET THE CURRENT DAY AND DATE
     static func getCurrentDate() -> String {
         let dateFormatter = DateFormatter()

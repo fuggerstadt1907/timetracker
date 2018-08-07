@@ -46,11 +46,16 @@ class RecordTableViewCell: UITableViewCell {
     }
     
     
-    // FUNCTION THAT IS CALLED TO PUSH DATA IN TO DB
+    // FUNCTION THAT IS CALLED TO PUSH DATA INTO DB
     func saveAfterCheckToDB(name: String, recordedTime: String){
-        let docRef = db.collection("\(dbCollection) (\(Utilities.formatDate()))").document(name)
+        
+        // Creating Reference to DB data
+        //let docRef = db.collection("\(dbCollection) (\(Utilities.formatDate()))").document()
+        let docRef = db.collection(Utilities.getCurrentYear()).document(Utilities.getCurrenMonth()).collection(Utilities.getCurrentDay()).document(name)
+        
         // Displaying Loading-Indicator
-        Utilities.displayLoadingIndicator(displayedMessage: "Bitte warten ...")
+        //Utilities.displayLoadingIndicator(displayedMessage: "Bitte warten ...")
+        
         // Check if Item has a recorded time
         let hasRecords: Bool
         if recordedTime == "00:00:00"{
@@ -59,18 +64,21 @@ class RecordTableViewCell: UITableViewCell {
         } else {
             hasRecords = true
         }
+        
+        // Accessing datas
         docRef.getDocument { (document, error) in
             if let document = document {
                 if document.exists {
-                    // Handle case, that the document already exists in DB
-                    let time: String = document.get("recordedTime") as! String
-                    // Check if recorded time changed
-                    if time != recordedTime {
-                        docRef.setData([
+                    
+                    let timestamp: Timestamp = document.get("createdAt") as! Timestamp
+                    let alert = UIAlertController(title: "Daten aktualisieren", message: "Wollen Sie die Daten in der DB aktualisieren?", preferredStyle: .alert)
+                    let firstAction = UIAlertAction(title: "Aktualisieren", style: .default) { alert -> Void in
+                        self.db.collection("\(self.dbCollection) (\(Utilities.formatDate()))").document().setData([
                             "name": name,
                             "hasRecords": hasRecords,
                             "recordedTime": recordedTime,
-                            "createdAt": FieldValue.serverTimestamp()
+                            "createdAt": timestamp,
+                            "lastUpdate": FieldValue.serverTimestamp()
                             ], completion: { (error: Error?) in
                                 if let error = error {
                                     Utilities.dismissLoadingIndicator(animated: true)
@@ -82,19 +90,22 @@ class RecordTableViewCell: UITableViewCell {
                                     self.showInsertedDataFromDB(name: name, isItAnUpdate: true)
                                 }
                         })
-                    } else {
-                        Utilities.dismissAlert()
-                        Utilities.dismissLoadingIndicator(animated: true)
-                        print("Document data already exists!")
-                        Utilities.displayAlertWithOkBtn(title: "Fehler beim Speichern", message: "Es existiert bereits ein Datensatz für \n''\(docRef.documentID)'' \nin der Datenbank!")
                     }
+                    let cancelAction = UIAlertAction(title: "Abbrechen", style: .default, handler: { (action : UIAlertAction!) -> Void in })
+                    alert.addAction(cancelAction)
+                    alert.addAction(firstAction)
+                    UIApplication.shared.keyWindow?.rootViewController?.self.present(alert, animated: true, completion: nil)
+                    
+                    // Call after datas successfully saved into DB
+                    self.showInsertedDataFromDB(name: name, isItAnUpdate: true)
                     
                 } else {
                     docRef.setData([
                         "name": name,
                         "hasRecords": hasRecords,
                         "recordedTime": recordedTime,
-                        "createdAt": FieldValue.serverTimestamp()
+                        "createdAt": FieldValue.serverTimestamp(),
+                        "lastUpdate": FieldValue.serverTimestamp()
                         ], completion: { (error: Error?) in
                             if let error = error {
                                 Utilities.dismissLoadingIndicator(animated: true)
@@ -103,7 +114,6 @@ class RecordTableViewCell: UITableViewCell {
                             else {
                                 Utilities.dismissLoadingIndicator(animated: true)
                                 print("DB Transfer successfull.")
-                                
                                 self.showInsertedDataFromDB(name: name, isItAnUpdate: false)
                             }
                     })
@@ -121,17 +131,19 @@ class RecordTableViewCell: UITableViewCell {
         let ref = db.collection("\(dbCollection) (\(Utilities.formatDate()))").document(name)
         ref.getDocument { (docSnapshot, error) in
             guard let docSnapshot = docSnapshot, docSnapshot.exists else { return }
-            let timestamp: Timestamp = (docSnapshot.get("createdAt") as? Timestamp)!
+            let timestamp: Timestamp = docSnapshot.get("createdAt") as! Timestamp
             let name: String = docSnapshot.get("name") as! String
             let time: String = docSnapshot.get("recordedTime") as! String
-            let date: Date = timestamp.dateValue()
+            let lastUpdate: Timestamp = docSnapshot.get("lastUpdate") as! Timestamp
+            let timestampDate: Date = timestamp.dateValue()
+            let lastUpdateDate: Date = lastUpdate.dateValue()
             let msg: String
             
             if isItAnUpdate {
-                msg = "Daten erfolgreich in DB aktualisiert.\nName: \(name)\nAufgezeichnete Zeit: \(time)\nAngelegt am \(Utilities.formatTimestampGetDate(date: date)) \nAngelegt um \(Utilities.formatTimestampGetTime(date: date)) Uhr"
+                msg = "Daten erfolgreich in DB aktualisiert.\nName: \(name)\nAufgezeichnete Zeit: \(time)\nAngelegt am \(Utilities.formatTimestampGetDate(date: timestampDate)) \nAngelegt um \(Utilities.formatTimestampGetTime(date: timestampDate)) Uhr \nLetztes Update: \(Utilities.formatTimestampGetDate(date: lastUpdateDate))"
                 Utilities.displayAlertWithOkBtn(title: "Daten wurden aktualisiert", message: msg)
             } else {
-                msg = "Daten erfolgreich in DB geschrieben.\nName: \(name)\nAufgezeichnete Zeit: \(time)\nAngelegt am \(Utilities.formatTimestampGetDate(date: date)) \nAngelegt um \(Utilities.formatTimestampGetTime(date: date)) Uhr"
+                msg = "Daten erfolgreich in DB geschrieben.\nName: \(name)\nAufgezeichnete Zeit: \(time)\nAngelegt am \(Utilities.formatTimestampGetDate(date: timestampDate)) \nAngelegt um \(Utilities.formatTimestampGetTime(date: timestampDate)) Uhr"
                 Utilities.displayAlertWithOkBtn(title: "Daten wurden gespeichert", message: msg)
             }
             
@@ -139,36 +151,7 @@ class RecordTableViewCell: UITableViewCell {
         }
     }
     
-    
-    // FUNCTION THAT IS CALLED TO GET A SINGLE ITEM FROM DB
-    func showSavedDataFromDB(name: String){
-        let ref = db.collection("\(dbCollection) (\(Utilities.formatDate()))").document(name)
-        ref.getDocument { (docSnapshot, error) in
-            guard let docSnapshot = docSnapshot, docSnapshot.exists else { return }
-            let timestamp: Timestamp = (docSnapshot.get("createdAt") as? Timestamp)!
-            let name: String = docSnapshot.get("name") as! String
-            let time: String = docSnapshot.get("recordedTime") as! String
-            let date: Date = timestamp.dateValue()
-            let msg: String
-            msg = "Daten erfolgreich in DB geschrieben.\nName: \(name)\nAufgezeichnete Zeit: \(time)\nAngelegt am \(Utilities.formatTimestampGetDate(date: date)) \nAngelegt um \(Utilities.formatTimestampGetTime(date: date)) Uhr"
-            Utilities.displayAlertWithOkBtn(title: "Daten wurden gespeichert", message: msg)
-        }
-    }
-    
-    
-    // FUNCTION THAT IS CALLED TO GET A SINGLE ITEM FROM DB
-    func showUpdatedDataFromDB(name: String){
-        let ref = db.collection("\(dbCollection) (\(Utilities.formatDate()))").document(name)
-        ref.getDocument { (docSnapshot, error) in
-            guard let docSnapshot = docSnapshot, docSnapshot.exists else { return }
-            let timestamp: Timestamp = (docSnapshot.get("createdAt") as? Timestamp)!
-            let name: String = docSnapshot.get("name") as! String
-            let time: String = docSnapshot.get("recordedTime") as! String
-            let date: Date = timestamp.dateValue()
-            let msg = "Daten erfolgreich in DB aktualisiert.\nName: \(name)\nAufgezeichnete Zeit: \(time)\nAngelegt am \(Utilities.formatTimestampGetDate(date: date)) \nAngelegt um \(Utilities.formatTimestampGetTime(date: date)) Uhr"
-            Utilities.displayAlertWithOkBtn(title: "Daten aktualisiert", message: msg)
-        }
-    }
+
     
   
     // FUNCTION THAT IS CALLED, WHEN PLAY/PAUSE BUTTON IS PRESSED
