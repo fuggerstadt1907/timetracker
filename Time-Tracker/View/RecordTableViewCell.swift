@@ -11,16 +11,23 @@ import FirebaseFirestore
 
 class RecordTableViewCell: UITableViewCell {
     
+    
+    
+    
     // CUSTOM VARIABLES
     var timer: Timer!
     var isRecording = false
-    var time = 0
+    var time: Int = 0
+    
+    
     
     
     // FIREBASE VARIABLES
     let db = Firestore.firestore()
     let settings = FirestoreSettings()
     let dbCollection = "Items"
+    
+    
     
     
     // TABLEVIEW CELL OUTLETS
@@ -32,61 +39,23 @@ class RecordTableViewCell: UITableViewCell {
     }
     
     
+    
+    
     override func awakeFromNib() {
         settings.areTimestampsInSnapshotsEnabled = true
-        db.settings = settings
     }
     
     
-    // FUNCTION THAT IS CALLED TO UPDATE DATA IN DB
-    func updateDataInDB(name: String, recordedTime: String){
-        // Creating new write batch
-        let batch = db.batch()
-        
-        // Check if Item has a recorded time
-        let hasRecords: Bool
-        if recordedTime == "00:00:00"{
-            hasRecords = false
-            print("hasRecords is false")
-        } else {
-            hasRecords = true
-        }
-        
-        // Creating Document Reference
-        let docRef = db.collection(Utilities.getCurrentYear()).document(Utilities.getCurrenMonth()).collection(Utilities.getCurrentDay()).document(name)
-        
-        // Accessing DB now
-        docRef.getDocument { (document, error) in
-            if let document = document {
-                if document.exists {
-                    let timestamp: Timestamp = document.get("createdAt") as! Timestamp
-                    batch.updateData(
-                        [
-                            "name": name,
-                            "hasRecords": hasRecords,
-                            "recordedTime": recordedTime,
-                            "createdAt": timestamp,
-                            "lastUpdate": FieldValue.serverTimestamp()
-                        ], forDocument: docRef)
-                    
-                    batch.commit(completion: { (error) in
-                        if let error = error {
-                            print("Error while updating batch \(error)")
-                        } else {
-                            print("Batch successfully updated!")
-                        }
-                    })
-                }
-            }
-        }
-    }
     
     
     // FUNCTION THAT IS CALLED TO WRITEINTO
-    func saveAfterCheckToDB(name: String, recordedTime: String) {
+    func saveAfterCheckToDB(name: String, recordedTime: String, timer: Int) {
         
         // Creating new write batch
         let batch = db.batch()
+        
+        // Start showing Loading Indicator
+        Utilities.displayLoadingIndicator(displayedMessage: "Bitte warten...")
         
         // Check if Item has a recorded time
         let hasRecords: Bool
@@ -102,26 +71,47 @@ class RecordTableViewCell: UITableViewCell {
         
         // Accessing DB now
         docRef.getDocument { (document, error) in
-
-                batch.setData(
-                    [
-                        "name": name,
-                        "hasRecords": hasRecords,
-                        "recordedTime": recordedTime,
-                        "createdAt": FieldValue.serverTimestamp(),
-                        "lastUpdate": FieldValue.serverTimestamp()
-                    ], forDocument: docRef)
-                batch.commit(completion: { (error) in
-                        if let error = error {
-                            print("Error while writing batch \(error)")
-                        }
-                        else {
-                            print("Batch successfully written!")
-                        }
-                })
-            
+            if let doc = document {
+                if doc.exists {
+                    print("Document already exists, updateData called...")
+                    Utilities.dismissLoadingIndicator(animated: true)
+                    batch.updateData(
+                        [
+                            "timer": timer,
+                            "name": name,
+                            "hasRecords": hasRecords,
+                            "recordedTime": recordedTime,
+                            "lastUpdate": FieldValue.serverTimestamp()
+                        ], forDocument: docRef)
+                }
+                else {
+                    print("Document not existing, setData called...")
+                    Utilities.dismissLoadingIndicator(animated: true)
+                    batch.setData(
+                        [
+                            "timer": timer,
+                            "name": name,
+                            "hasRecords": hasRecords,
+                            "recordedTime": recordedTime,
+                            "createdAt": FieldValue.serverTimestamp(),
+                            "lastUpdate": FieldValue.serverTimestamp()
+                        ], forDocument: docRef)
+                }
+            }
+            batch.commit(completion: { (error) in
+                if let error = error {
+                    print("Error while writing batch \(error.localizedDescription)")
+                    Utilities.displayAlertWithOkBtn(title: "DB Fehler", message: "\(error.localizedDescription)")
+                }
+                else {
+                    print("Batch successfully written!")
+                    Utilities.displayAlertWithOkBtn(title: "Übertragung erfolgreich", message: "Die Daten wurden erfolgreich in die Datenbank übertragen")
+                }
+            })
         }
     }
+    
+    
     
     
     // FUNCTION THAT IS CALLED TO GET A SINGLE ITEM FROM DB
@@ -147,13 +137,15 @@ class RecordTableViewCell: UITableViewCell {
         }
     }
     
-
     
-  
+    
+    
     // FUNCTION THAT IS CALLED, WHEN PLAY/PAUSE BUTTON IS PRESSED
     @objc func buttonPressed() {
         toggleButton(bool: !isRecording)
     }
+    
+    
     
     
     // FUNCTION THAT IS CALLED, AFTER BUTTONPRESSED-FUNCTION EXECUTED, TO TOGGLE BOOL AND BUTTON IMAGE
@@ -163,10 +155,37 @@ class RecordTableViewCell: UITableViewCell {
     }
     
     
+    
+    
     // FUNCTION THAT IS CALLED, TO FIRE THE TIMER IN TABLEVIEW CELL
     func startTimer(){
         timer = Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: #selector(updateTimeLabel), userInfo: nil, repeats: true)
     }
+    
+    
+    
+    
+    // FUNCTION IS CALLED TO GET TIME VALUE FOR TIMER
+    func getTimeValue(){
+        
+        // Creating Document Reference
+        let colRef = db.collection(Utilities.getCurrentYear()).document(Utilities.getCurrenMonth()).collection(Utilities.getCurrentDay())
+        
+        colRef.getDocuments { (snapshot, err) in
+            if let err = err {
+                Utilities.displayAlertWithOkBtn(title: "Fehler", message: "Ein Fehler ist aufgetreten: \n\(err.localizedDescription)")
+            }
+            else {
+                for document in snapshot!.documents {
+                    var time = document.data()["timer"] as? Int
+                    self.time = time!
+                    time = time! + 1
+                }
+            }
+        }
+    }
+    
+
     
     
     // FUNCTION THAT IS CALLED EVERY SECOND, TO UPDATE TIME-LABEL IN TABLEVIEW CELL
@@ -178,12 +197,16 @@ class RecordTableViewCell: UITableViewCell {
     }
     
     
+    
+    
     // FUNCTION THAT IS CALLED, TO STOP THE TIMER
     func stopTimer(){
         categoryActionButton.setImage(#imageLiteral(resourceName: "playIcon"), for: .normal)
         timer.invalidate()
         self.backgroundColor = nil
     }
+    
+    
     
     
     // FUNCTION THAT IS CALLED TO FORMATT TIME-LABEL IN HH:MM:SS

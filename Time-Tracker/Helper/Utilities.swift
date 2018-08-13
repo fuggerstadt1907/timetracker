@@ -12,6 +12,8 @@ import UIKit
 enum Utilities {
     
     
+    
+    
     // FUNCTION THAT IS CALLED TO GET THE CURRENT YEAR
     static func getCurrentYear() -> String {
         let dateFormatter = DateFormatter()
@@ -19,6 +21,8 @@ enum Utilities {
         dateFormatter.dateFormat = "yyyy"
         return  dateFormatter.string(from: date)
     }
+    
+    
     
     
     // FUNCTION THAT IS CALLED TO GET THE CURRENT MONTH
@@ -30,6 +34,18 @@ enum Utilities {
     }
     
     
+    
+    
+    static func helper() -> String {
+        let dateFormatter = DateFormatter()
+        let date = Date()
+        dateFormatter.dateFormat = "dd MMMM yyyy"
+        return  dateFormatter.string(from: date)
+    }
+    
+    
+    
+    
     // FUNCTION THAT IS CALLED TO GET THE CURRENT DAY
     static func getCurrentDay() -> String {
         let dateFormatter = DateFormatter()
@@ -37,6 +53,8 @@ enum Utilities {
         dateFormatter.dateFormat = "dd.MM.yyyy"
         return  dateFormatter.string(from: date)
     }
+    
+    
     
     
     // FUNCTION THAT IS CALLED TO GET THE CURRENT DAY AND DATE
@@ -49,6 +67,8 @@ enum Utilities {
     }
     
     
+    
+    
     // FUNCTION THAT IS CALLED TO FORMAT TIMESTAMP VALUE
     static func formatTimestampGetDate(date: Date) -> String {
         let dateFormatter = DateFormatter()
@@ -57,12 +77,16 @@ enum Utilities {
     }
     
     
+    
+    
     // FUNCTION THAT IS CALLED TO FORMAT TIMESTAMP VALUE
     static func formatTimestampGetTime(date: Date) -> String {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "HH:mm:ss"
         return  dateFormatter.string(from: date)
     }
+    
+    
     
     
     // FUNCTION THAT IS CALLED TO FORMAT DATE in dd.MM.yyyy Format
@@ -74,19 +98,25 @@ enum Utilities {
     }
     
     
+    
+    
     // FUNCTION THAT IS CALLED TO BUID AN ALERT WITH OK BUTTON
     static func displayAlertWithOkBtn(title: String, message: String){
         let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
-        let alertAction = UIAlertAction(title: "Okay", style: .default, handler: { _ in })
+        let alertAction = UIAlertAction(title: "OK", style: .default, handler: { _ in })
         alert.addAction(alertAction)
         UIApplication.shared.keyWindow?.rootViewController?.present(alert, animated: true, completion: nil)
     }
+    
+    
     
     
     // FUNCTION THAT IS CALLED TO DISMISS AN ALERT VIEW
     static func dismissAlert(){
         UIApplication.shared.keyWindow?.rootViewController?.dismiss(animated: true, completion: nil)
     }
+    
+    
     
     
     // FUNCTION THAT IS CALLED TO SHOW LOADING INDICATOR
@@ -104,6 +134,8 @@ enum Utilities {
         alert.view.addSubview(loadingIndicator)
         UIApplication.shared.keyWindow?.rootViewController?.present(alert, animated: true, completion: nil)
     }
+    
+    
     
     
     // FUNCTION THAT IS CALLED TO DISMISS A LOADING INDICATOR

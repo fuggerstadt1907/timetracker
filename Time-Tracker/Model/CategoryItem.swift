@@ -8,9 +8,15 @@
 
 import Foundation
 import UIKit
+import Firebase
+
 
 struct CategoryItem {
-    var categoryName: String
-    var recordedTime: String?
+    //var createdAt: Timestamp
+    //var hasRecords: Bool
+    //var lastUpdate: Timestamp
+    var name: String
+    var recordedTime: String
+    var time: Int
 }
 
