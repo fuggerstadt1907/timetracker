@@ -13,21 +13,23 @@ import Charts
 class DashboardViewController: UIViewController {
     
     
-    
+
     
     // CUSTOM VARIABLES
     //var firstChartData = PieChartDataEntry(value: 0)
     //var secondChartData = PieChartDataEntry(value: 0)
     var itemNames = [String]()
     var itemTimeValue = [Double]()
-    var dataEntries: [BarChartDataEntry] = []
+    var itemDate = [String]()
+    var dataEntries: [PieChartDataEntry] = []
     var numberOfDataEntries = [PieChartDataEntry]()
-
+    
     
     
     
     // FIRESTORE
     lazy var db = Firestore.firestore()
+    
     
     
     
@@ -42,23 +44,17 @@ class DashboardViewController: UIViewController {
     // VIEW DID LOAD
     override func viewDidLoad() {
         super.viewDidLoad()
-                
+        //setData()
         selectDateBtn.setTitle(formatDatePickerValue(), for: .normal)
         datePicker.maximumDate = Date()
         
         // Chart Data
         self.pieChart.chartDescription?.text = ""
         pieChart.noDataText = "Es wurden keine Daten gefunden"
-        //firstChartData.data = 5 as AnyObject
-        //firstChartData.value = 100
-        //firstChartData.label = "first Data"
-        //secondChartData.data = 10 as AnyObject
-        //secondChartData.label = "second Data"
-        //numberOfDataEntries = [dictOfItems]
         getDashboardDataFromDB()
         self.tabBarItem = UITabBarItem(title: "Dashboard", image: #imageLiteral(resourceName: "DashboardIcon"), tag: 1)
     }
-
+    
     
     
     
@@ -76,6 +72,10 @@ class DashboardViewController: UIViewController {
     // FUNCTION THAT IS CALLED AFTER DATE PICKER CHANGED
     @IBAction func datePickerHandler(_ sender: Any) {
         self.selectDateBtn.setTitle(formatDatePickerValue(), for: .normal)
+        self.itemDate.removeAll()
+        self.itemNames.removeAll()
+        self.itemTimeValue.removeAll()
+        self.dataEntries.removeAll()
         getDashboardDataFromDB()
     }
     
@@ -86,6 +86,7 @@ class DashboardViewController: UIViewController {
     func getDashboardDataFromDB() {
         let selectedDate = formatDatePickerValueForDbDoc()
         print("Selcted date = \(selectedDate)")
+        pieChart.noDataText = "abc"
         
         let docRef = db.collection(Utilities.getCurrentYear()).document(Utilities.getCurrenMonth()).collection(selectedDate)
         docRef.getDocuments { (snapshot, err) in
@@ -94,39 +95,48 @@ class DashboardViewController: UIViewController {
             }
             else {
                 for document in snapshot!.documents {
+                    
                     let timeValue = document.data()["timer"] as! Double
                     let name = document.data()["name"] as! String
-                    print("Timer-Values from DB: \(timeValue)")
+                     
+
                     self.itemNames.append(name)
                     self.itemTimeValue.append(timeValue)
+
                     print("Names: \(self.itemNames)")
                     print("Timers: \(self.itemTimeValue)")
-                    
-                    for i in 0..<self.itemNames.count {
-                        let dataPoint = BarChartDataEntry(x: Double(i), y: Double(self.itemTimeValue[i]))
-                        self.dataEntries.append(dataPoint)
-                        
-                        let chartDataSet = PieChartDataSet(values: self.dataEntries, label: "test")
-                        let chartData = PieChartData(dataSet: chartDataSet)
-                        
-                        let colors = [CategoryColors.Green, CategoryColors.Purple]
-                        chartDataSet.colors = colors
-                        
-                        self.pieChart.data = chartData
-                    }
-                    
-                    
+
                 }
+                self.setData()
             }
         }
-        
     }
-
+    
+    
+    
+    // FUNCTION THAT IS CALLED TO SETUP THE CHART
+    func setData() {
+        print("Setup chart called..")
+        for i in 0..<self.itemNames.count {
+            let dataPoint = PieChartDataEntry(value: Double(self.itemTimeValue[i]), label: self.itemNames[i])
+            self.dataEntries.append(dataPoint)
+            
+        }
+        
+        let chartDataSet = PieChartDataSet(values: self.dataEntries, label: nil)
+        let chartData = PieChartData(dataSet: chartDataSet)
+        
+        let colors = [CategoryColors.Red, CategoryColors.Orange, CategoryColors.Yellow, CategoryColors.Green, CategoryColors.LightBlue, CategoryColors.DarkBlue, CategoryColors.Purple, CategoryColors.Pink, CategoryColors.Turquoise, CategoryColors.NavbarBlue]
+        chartDataSet.colors = colors
+        
+        self.pieChart.data = chartData
+    }
+    
     
     
     
     // FUNCTION THAT IS CALLED TO FORMAT DATEPICKER VALUE
-    private func formatDatePickerValue() -> String {
+    func formatDatePickerValue() -> String {
         let dateFormatter = DateFormatter()
         let date = self.datePicker.date
         dateFormatter.dateFormat = "EEEE, dd.MM.yyyy"
@@ -137,11 +147,12 @@ class DashboardViewController: UIViewController {
     
     
     // FUNCTION THAT IS CALLED TO FORMAT DATEPICKER VALUE
-    private func formatDatePickerValueForDbDoc() -> String {
+    func formatDatePickerValueForDbDoc() -> String {
         let dateFormatter = DateFormatter()
         let date = self.datePicker.date
         dateFormatter.dateFormat = "dd.MM.yyyy"
         return  dateFormatter.string(from: date)
     }
-    
+
 }
+
